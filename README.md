@@ -5,7 +5,7 @@ This is a blog aggregator. All posts are stored in emercoin blockchain. The post
 
 The blockchain values from NVS gets parsed by this aggregator using @key="value" params inside the NVS value.
 
-##Register a blogger (optional)
+## Register a blogger (optional)
 1. Create a record named blogger:username in emercoin NVS
 2. Add optional value as a user description. 
 
