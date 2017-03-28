@@ -12,7 +12,7 @@ The blockchain values from NVS gets parsed by this aggregator using @key="value"
 * @key emercoin address (example ENwm9Aq8vHgTW6akyti3vQSZJK2qPAGaYW)
 * @sig the bloggers signature, result of signmessage "emercoinaddress" "username" command from emercoin console or RPC
 
-##Make a post
+## Make a post
 1. Create a record named blog:postname in emercoin NVS
 2. The value will be the post body.
 * The body can contain all HTML tags except < script > tag 
@@ -25,11 +25,11 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 * @keywords "drugs,sex,rockandroll" (optional)
 * @reply the name of the post you want to reply to (optional)
 
-##Make a reply to other post
+## Make a reply to other post
 * Any post can reply to any other post using @reply keyword 
 * @reply the name of the post you want to reply to
 
-##Links
+## Links
 * Emercoin http://emercoin.com/
 * Market cap http://coinmarketcap.com/currencies/emercoin/#markets
 * Forum (en) https://bitcointalk.org/index.php?topic=362513.0
