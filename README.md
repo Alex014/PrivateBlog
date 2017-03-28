@@ -35,6 +35,11 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 * Forum (en) https://bitcointalk.org/index.php?topic=362513.0
 * Forum (ru) https://forum.bits.media/index.php?/topic/3408-emc-emercoin-pos/
 
-### writen in PHP
-### darkblog.sql - mysql database
-### cron.php - completely eraises all data and agregates new data from blockchain (run by cron)
+###### writen in PHP
+###### darkblog.sql - mysql database
+###### cron.php - completely eraises all data and agregates new data from blockchain (run by cron)
+
+## Uses
+
+###### MeekroDB http://meekro.com/
+###### Bootstrap http://getbootstrap.com/
