@@ -37,6 +37,10 @@ class parser {
         $result['content'] = str_replace("\n\n", '', $result['content']);
         $result['content'] = str_replace("\n", '<br/>', $result['content']);
         
+        //Links
+        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
+        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
+        
         //$result['content'] = strip_tags($result['content'], 
         //        "<b><em><i><small><strong><sub><sup><ins><del><mark><img><p><span><h1><h2><h3><h4><h5><h6><h7><h8><h9><ol><ul><li>");
         $result['content'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $result['content']);

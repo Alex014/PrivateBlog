@@ -163,8 +163,10 @@ class posts {
         $olangs = new \darkblog\db\langs();
         $okeywords = new \darkblog\db\keywords();
         $opk = new \darkblog\db\posts_keywords();
+        $okl = new \darkblog\db\keywords_langs();
         $ousers = new \darkblog\db\users();
         $opk->clear();
+        $okl->clear();
         $okeywords->clear();
         $oposts->clear();
         $olangs->clear();
