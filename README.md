@@ -30,7 +30,7 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 * @reply the name of the post you want to reply to
 
 ## Links to other posts
-[[ #post_name_link_to="link caption" ]]
+ #post_name_link_to="link caption"
 
 ## Links
 * Emercoin http://emercoin.com/
