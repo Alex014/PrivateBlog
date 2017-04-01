@@ -37,9 +37,16 @@ class parser {
         $result['content'] = str_replace("\n\n", '', $result['content']);
         $result['content'] = str_replace("\n", '<br/>', $result['content']);
         
-        //Links
+        //Links to posts
         $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
         $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
+        
+        //Links to files
+        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content'], 'e');
+        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content'], 'e');
+        
+        $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content'], 'e');
+        $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content'], 'e');
         
         //$result['content'] = strip_tags($result['content'], 
         //        "<b><em><i><small><strong><sub><sup><ins><del><mark><img><p><span><h1><h2><h3><h4><h5><h6><h7><h8><h9><ol><ul><li>");

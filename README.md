@@ -32,6 +32,21 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 ## Links to other posts
  #post_name_link_to="link caption"
 
+## Big files
+ Large files > 20kb is divided into parts
+
+ file:file_hash
+ {"content_type": "image/jpeg", "name": "Konrad_Curze_sketch_small.jpg", "parts": 5}
+
+ file:file_hash:1
+ file:file_hash:2
+ file:file_hash:3
+ file:file_hash:4
+ file:file_hash:5
+
+ $$$hash_of_file - url to file
+ $hash_of_file="link caption" - link to file
+
 ## Links
 * Emercoin http://emercoin.com/
 * Market cap http://coinmarketcap.com/currencies/emercoin/#markets

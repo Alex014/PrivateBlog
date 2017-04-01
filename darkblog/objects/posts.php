@@ -220,10 +220,9 @@ class posts {
         //Inserting primary posts
         $this->insertPosts($insert_posts);
         
-        
         //Inserting other data (from posts) and updating posts
-        $posts = $oposts->selectAll();
-        
+        $posts = $oposts->selectAll(false);
+
         foreach ($posts as $post) {
             $metadata = unserialize($post['metadata']);
             
@@ -240,7 +239,7 @@ class posts {
                 $lang_id = $olangs->insertId();
             }
             
-            if(!empty($lang_id))
+            if(empty($post['lang_id']))
                 $oposts->updateLang($post['id'], $lang_id);
 
             //User

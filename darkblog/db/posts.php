@@ -87,12 +87,15 @@ SQL;
         return pager::pagedQuery($sql);
     }
     
-    public function selectAll($page = 1, $order = 'name') {
+    public function selectAll($paged = true) {
         $sql = <<<SQL
             SELECT *
             FROM $this->table
 SQL;
-        return pager::pagedQuery($sql);
+        if($paged)
+            return pager::pagedQuery($sql);
+        else
+            return \DB::query ($sql);
     }
     
     public function selectByUser($user_id, $lang_id = 0) {
