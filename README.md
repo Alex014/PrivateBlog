@@ -35,14 +35,20 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 ## Big files
  Large files > 20kb is divided into parts
 
- file:file_hash
+ Execute console commands:
+. split --bytes=18k Konrad_Curze_sketch_small.jpg
+. md5sum Konrad_Curze_sketch_small.jpg
+. file -b --mime-type Konrad_Curze_sketch_small.jpg
+ 
+ Create NVS records
+
+ file:file_hash (file:3d9c09df0d72f0a3b02d03a89d2ee5b1)
  {"content_type": "image/jpeg", "name": "Konrad_Curze_sketch_small.jpg", "parts": 5}
 
- file:file_hash:1
- file:file_hash:2
- file:file_hash:3
- file:file_hash:4
- file:file_hash:5
+ file:file_hash:1 (file:3d9c09df0d72f0a3b02d03a89d2ee5b1:1) - part 1 of file Konrad_Curze_sketch_small.jpg
+ ...
+ file:file_hash:5 - part 5
+ 
 
  $$$hash_of_file - url to file
  $hash_of_file="link caption" - link to file
