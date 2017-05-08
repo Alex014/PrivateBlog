@@ -11,12 +11,21 @@ class baseTable {
     public $pk = '';
     public $insert_id = '';
     
-    public $table_posts = DB_PREFIX.'posts';
-    public $table_keywords = DB_PREFIX.'keywords';
-    public $table_posts_keywords = DB_PREFIX.'posts_keywords';
-    public $table_users = DB_PREFIX.'users';
-    public $table_langs = DB_PREFIX.'langs';
-    public $table_keywords_langs = DB_PREFIX.'keywords_langs';
+    public $table_posts;
+    public $table_keywords;
+    public $table_posts_keywords;
+    public $table_users;
+    public $table_langs;
+    public $table_keywords_langs;
+    
+    public function __construct() {
+        $this->table_posts = DB_PREFIX.'posts';
+        $this->table_keywords = DB_PREFIX.'keywords';
+        $this->table_posts_keywords = DB_PREFIX.'posts_keywords';
+        $this->table_users = DB_PREFIX.'users';
+        $this->table_langs = DB_PREFIX.'langs';
+        $this->table_keywords_langs = DB_PREFIX.'keywords_langs';
+    }
     
     public function get($condition) {
         if(is_array($condition)) {

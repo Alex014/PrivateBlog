@@ -11,6 +11,7 @@ class langs extends baseTable {
     public $table = '';
     
     public function __construct() {
+        parent::__construct();
         $this->table = $this->table_langs;
     }
     
