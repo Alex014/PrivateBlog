@@ -99,7 +99,7 @@ class jsonRPCClient {
 		
 		// check
 		if (!is_scalar($method)) {
-			throw new Exception('Method name has no scalar value');
+			throw new \Exception('Method name has no scalar value');
 		}
 		
 		// check
@@ -107,7 +107,7 @@ class jsonRPCClient {
 			// no keys
 			$params = array_values($params);
 		} else {
-			throw new Exception('Params must be given as array');
+			throw new \Exception('Params must be given as array');
 		}
 		
 		// sets notification or request task
@@ -137,7 +137,7 @@ class jsonRPCClient {
     $responce = curl_exec($ch);
 
     if(!is_string($responce)) {
-      throw new Exception("Can't connect to: ".$this->url.' '.curl_error ( $ch ));
+      throw new \Exception("Can't connect to: ".$this->url.' '.curl_error ( $ch ));
     }
     
 		$responce = json_decode($responce,true);
@@ -152,11 +152,11 @@ class jsonRPCClient {
 		if (!$this->notification) {
 			// check
 			if ($responce['id'] != $currentId) {
-				throw new Exception('Incorrect response id (request id: '.$currentId.', response id: '.$responce['id'].')');
+				throw new \Exception('Incorrect response id (request id: '.$currentId.', response id: '.$responce['id'].')');
 			}
 			if (!is_null($responce['error'])) {
         jsonRPCClient::$error = $responce['error'];
-				throw new Exception('Request error: '.$responce['error']);
+				throw new \Exception('Request error: '.$responce['error']['message']);
 			}
 			
 			return $responce['result'];

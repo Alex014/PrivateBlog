@@ -6,7 +6,7 @@ class libAutoloader {
     
     public function __construct() {
         if(!self::$registered) {
-            spl_autoload_register(array($this, 'loader'), true, true);
+            spl_autoload_register(array($this, 'loader'), true, false);
             self::$registered = true;
         }
     }
@@ -15,8 +15,13 @@ class libAutoloader {
         $path = explode('\\', $className);
         $path = implode('/', $path);
         $fileName = __DIR__.'/'.$path.'.php';
-
-        require_once $fileName;
-        return true;
+        
+        if(file_exists($fileName)) {
+            require_once $fileName;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
