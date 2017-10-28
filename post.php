@@ -22,6 +22,7 @@ if(!empty($_GET['id'])) {
     $oposts = new \darkblog\objects\posts();
     
     $post = $oposts->getPost((int)$_GET['id']);
+    
     $post['replies'] = $oposts->getReplies($post['id']);
     if(!empty($post['reply_id']))
         $post['reply_to'] = $oposts->getPost($post['reply_id']);
@@ -34,9 +35,14 @@ if(!empty($_GET['name'])) {
     
     $post = $oposts->getPostByName($_GET['name']);
 
-    $post['replies'] = $oposts->getReplies($post['id']);
-    if(!empty($post['reply_id']))
-        $post['reply_to'] = $oposts->getPost($post['reply_id']);
+    if(!empty($post['id'])) {
+        $post['replies'] = $oposts->getReplies($post['id']);
+        if(!empty($post['reply_id']))
+            $post['reply_to'] = $oposts->getPost($post['reply_id']);
+    }
+    else {
+        
+    }
     
     require 'templates/header.php';
     require 'templates/post.php';

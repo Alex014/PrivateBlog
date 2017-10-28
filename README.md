@@ -32,6 +32,10 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 ## Links to other posts
  #post_name_link_to="link caption"
 
+## Post, that includes other posts or post > 20kb
+Inside post: %%subpost_name%%
+Max level of subposts is 5
+
 ## Big files
  Large files > 20kb is divided into parts
 

@@ -48,15 +48,50 @@ class parser {
         $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content'], 'e');
         $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content'], 'e');
         
-        //$result['content'] = strip_tags($result['content'], 
-        //        "<b><em><i><small><strong><sub><sup><ins><del><mark><img><p><span><h1><h2><h3><h4><h5><h6><h7><h8><h9><ol><ul><li>");
+        //Scripts
         $result['content'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $result['content']);
-        
-
-            //echo "<br/><br/><br/><br/><br/><br/>";
-            //var_dump($result['keywords']); 
             
         return $result;
+    }
+    
+    /**
+     * Link all parsed posts
+     * @param type $posts
+     * @param type $content
+     * @param type $levels
+     */
+    public static function link(&$posts, $post, $levels = 5) {
+        $results = array();
+        
+        if($levels > 0) {
+            
+            $regex_posts = array();
+            mb_ereg_search_init($post['content'], '%%(.*?)%%');
+            
+            while ($matches = mb_ereg_search_regs()) {
+                $regex_posts[$matches[1]] = $matches[0];
+            }
+            
+            if(!empty($regex_posts)) { 
+                foreach ($regex_posts as $post_name => $regex) {
+                    if(isset($posts[$post_name])) { //var_dump($post_name);
+                        $posts[$post_name] = self::link($posts, $posts[$post_name], $levels - 1);
+                        $results[$regex] = $posts[$post_name]['content'];
+                    }
+                }
+            }
+
+            if(!empty($results)) {
+                foreach ($results as $post_name => $post_content) {
+                    $post['content'] = mb_eregi_replace($post_name, $post_content, $post['content']);
+                }
+            }
+            
+        }
+            
+        $post['content'] = mb_eregi_replace('%%.*?%%', '', $post['content']);
+        
+        return $post;
     }
     
     

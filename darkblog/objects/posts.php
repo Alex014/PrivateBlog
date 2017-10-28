@@ -135,6 +135,10 @@ class posts {
         $posts = \darkblog\lib\emercoin::name_filter('^blog:.+', 0, 0, 0, '', 'base64');
         
         $parsed_posts = array();
+        $linked_posts = array();
+        
+        //Parsing ...
+        echo "Parsing ...";
         foreach ($posts as $post) {
             $postname = explode(':', $post['name']);
             $postname = array_slice($postname, 1);
@@ -153,7 +157,13 @@ class posts {
             }
         }
         
-        return $parsed_posts;
+        //Linking ...
+        echo "Linking ...";
+        foreach ($parsed_posts as $postname => $post) {
+            $linked_posts[$postname] = \darkblog\lib\parser::link($parsed_posts, $post);
+        }
+        
+        return $linked_posts;
     }
     
     

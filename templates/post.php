@@ -1,3 +1,4 @@
+<? if(!empty($post['id'])): ?>
 <div class="row" style="padding-top: 60px;">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -10,7 +11,22 @@
         </div>
     </div>
 </div>
+<?else:?>
+<div class="row" style="padding-top: 60px;">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Post not found</h3>
+            </div>
+            <div class="panel-body">
+                EMPTY
+            </div>
+        </div>
+    </div>
+</div>
+<? endif; ?>
 
+<? if(!empty($post['keywords'])): ?>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -25,6 +41,7 @@
         </div>
     </div>
 </div>
+<? endif; ?>
 
 <? if(!empty($post['user_id'])): ?>
 <div class="row">
