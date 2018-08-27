@@ -119,11 +119,11 @@ class jsonRPCClient {
 		
 		// prepares the request
 		$request = array(
-            'jsonrpc' => '1.0',
-						'method' => $method,
-						'params' => $params,
-						'id' => $currentId
-						);
+                    'jsonrpc' => '1.0',
+                    'method' => $method,
+                    'params' => $params,
+                    'id' => $currentId
+                );
 		$request = json_encode($request);
 		$this->debug && $this->debug.='***** Request *****'."\n".$request."\n".'***** End Of request *****'."\n\n";
 		

@@ -1,6 +1,11 @@
 <?php
 $application = 'darkblog';
-require_once 'conf/conf.php';
+
+error_reporting(E_ALL - E_NOTICE - E_DEPRECATED - E_WARNING);
+ini_set('display_errors', 1);
+
+mb_internal_encoding("UTF-8"); 
+mb_regex_encoding('UTF-8');
 
 require_once 'autoloader.php';
 
@@ -16,4 +21,5 @@ $posts->clearAll();
 $users->importUsers();
 $posts->importPosts();
 
-echo 'ok';
+ob_clean();
+echo 'OK';

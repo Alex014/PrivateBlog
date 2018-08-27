@@ -11,6 +11,8 @@ require_once 'conf/db.php';
 require_once 'conf/emercoin.conf.php';
 require_once 'conf/other.php';
 
+require_once 'darkblog/other/text.php';
+
 $page = 'post';
 
 \darkblog\other\url::parse();
