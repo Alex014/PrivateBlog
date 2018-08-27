@@ -73,3 +73,8 @@ Max level of subposts is 5
 
 ###### MeekroDB http://meekro.com/
 ###### Bootstrap http://getbootstrap.com/
+
+## Donate
+
+###### Emercoin EQkpLeX4FhqxnoXdPMJqnaHxJHHgNgTKLh
+###### Bitcoin 1JU7QyyiavuKeZvCkxA269a3wnf8qb1S5p
