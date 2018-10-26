@@ -8,11 +8,13 @@ namespace darkblog\lib;
  */
 class parser {
     
+    public static $BLOCK_SIZE = 18000;
+    
     /**
      * Parse text content into array with values
      * @param type $content
      */
-    public static function parse($content) {
+    public static function parse($content, $bl2br = true) {
         $matches = array();
         
         //preg_match_all('/@(\w+).*?=.*?[\'"](.*?)[\'"]/imsr', $content, $matches, PREG_SET_ORDER);
@@ -35,7 +37,9 @@ class parser {
         $result['content'] = mb_eregi_replace('@(\w+)\s*=\s*([^\n^\'^""]+)', '', $result['content']);
         $result['content'] = str_replace("\n\n\n", '', $result['content']);
         $result['content'] = str_replace("\n\n", '', $result['content']);
-        $result['content'] = str_replace("\n", '<br/>', $result['content']);
+        
+        if($bl2br)
+            $result['content'] = str_replace("\n", '<br/>', $result['content']);
         
         //Links to posts
         $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
@@ -111,5 +115,73 @@ class parser {
     
     public static function nullempty($value) {
         if($value == null) return ''; else return trim($value);
+    }
+    
+    
+    private static function build_tail($vars) {
+        $text = '';
+        
+        foreach ($vars as $key => $value) {
+            $key = str_replace(array('"',"'",'@'), '', $key);
+            $value = str_replace(array('"',"'",'@'), '', $value);
+            $text .= "\r\n"."\r\n";
+            $text .= "\r\n"."@$key=\"$value\"";
+        }
+        
+        return $text;
+    }
+    
+    /**
+     * 
+     * @param type $text
+     * @param type $post_name
+     * @param type $vars
+     * @return array (post_name => 'main content', post_name_1 => 'sub content', post_name_2 => 'sub content', ...)
+     */
+    public static function build($text, $post_name, $vars) {
+        $build_output = array();
+        
+        $size = strlen($text);
+        
+        if($size < self::$BLOCK_SIZE) {
+            //Build main part
+            $text .= self::build_tail($vars);
+                    
+            $build_output[0] = $text;
+        }
+        else {
+            //$parts = ceil($size/ self::$BLOCK_SIZE);
+
+            $text_final = '';
+            $atext_final = array();
+            $atext = preg_split("/\r\n|\n|\r/", $text);
+            
+            $next_part = '';
+            foreach ($atext as $part) {
+                if(strlen($next_part.PHP_EOL.$part) < self::$BLOCK_SIZE) {
+                    $next_part .= PHP_EOL.$part;
+                }
+                else {
+                    $atext_final[] = $next_part;
+                    $next_part = $part;
+                }
+            }
+            $atext_final[] = $next_part;
+
+            //Build parts
+            $index = 0;
+            foreach ($atext_final as $part) {
+                $index++;
+                $text_final .= " %%$post_name"."_"."$index%% ".PHP_EOL;
+                $build_output[$index] = $part;
+            }
+            
+            //Build main part
+            $text_final .= self::build_tail($vars);
+            $build_output[0] = $text_final;
+        
+        }
+        
+        return $build_output;
     }
 }

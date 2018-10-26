@@ -72,6 +72,7 @@ class session {
       $st->closeCursor();
 	  }
 	  //print "OK";
+          return true;
 	}
 	
 	function destroy($id) {

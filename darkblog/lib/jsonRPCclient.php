@@ -4,6 +4,7 @@ namespace darkblog\lib;
 					COPYRIGHT
 
 Copyright 2007 Sergio Vaccaro <sergio@inservibile.org>
+Modified by Neo
 
 This file is part of JSON-RPC PHP.
 
@@ -32,6 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 class jsonRPCClient {
   
   public static $error;
+  public static $output;
 	
 	/**
 	 * Debug state
@@ -73,7 +75,7 @@ class jsonRPCClient {
 		// debug state
 		empty($debug) ? $this->debug = false : $this->debug = true;
 		// message id
-		$this->id = 1;
+		$this->id = rand(1, 99999);
 	}
 	
 	/**
@@ -124,14 +126,22 @@ class jsonRPCClient {
                     'params' => $params,
                     'id' => $currentId
                 );
-		$request = json_encode($request);
-		$this->debug && $this->debug.='***** Request *****'."\n".$request."\n".'***** End Of request *****'."\n\n";
-		
+                
+		// debug output
+                if($this->debug) {
+                    self::$output[] = '';
+                    self::$output[] = '***** Request *****';
+                    self::$output[] = print_r($request, true);
+                    self::$output[] = '***** End Of request *****';
+                }
+                
+		$request = json_encode($request, JSON_UNESCAPED_UNICODE );
+                
 		// performs the HTTP POST
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('content-type: application/json;'));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('content-type: application/json;charset=\"utf-8\"'));
 		curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
     $responce = curl_exec($ch);
@@ -139,14 +149,16 @@ class jsonRPCClient {
     if(!is_string($responce)) {
       throw new \Exception("Can't connect to: ".$this->url.' '.curl_error ( $ch ));
     }
+    else {
+        self::$output[] = '';
+        self::$output[] = '***** Responce *****';
+        self::$output[] = $responce;
+        self::$output[] = '***** End Of responce *****';
+    }
     
 		$responce = json_decode($responce,true);
 		//var_dump($responce);
 		curl_close($ch);
-		// debug output
-		if ($this->debug) {
-			echo nl2br($debug);
-		}
 		
 		// final checks and return
 		if (!$this->notification) {
@@ -165,5 +177,9 @@ class jsonRPCClient {
 			return true;
 		}
 	}
+        
+        public static function printOutout() {
+            echo implode('<br/>', self::$output);
+        }
 }
 ?>

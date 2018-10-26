@@ -8,28 +8,40 @@
         <title>Private Blog</title>
         
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        
+        
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/js/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        
+
+    <script src="/js/bootstrap.validate.js"></script>
+    <script src="/js/bootstrap.validate.en.js"></script>
+
+        <script src="/js/me.js"></script>
     </head>
 <body>
     
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Private Blog</a>
+          <a class="navbar-brand" href="#">My Private Blog</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li role="presentation" <?if($page == 'bloggers'):?>class="active"<?endif;?>><a href="/bloggers.php">Bloggers</a></li>
-            <li role="presentation" <?if($page == 'keywords'):?>class="active"<?endif;?>><a href="/keywords.php">Keywords</a></li>
-            <li role="presentation" <?if($page == 'search'):?>class="active"<?endif;?>><a href="/search.php">Search</a></li>
-            <?if($page == 'post'):?>
-            <li role="presentation" class="active"><a href="#"><?=nl2br(strip_tags($post['title']))?></a></li>
-            <?endif;?>
-            <li role="presentation" <?if($page == 'config'):?>class="active"<?endif;?>><a href="/config.php">Config</a></li>
-            <li role="presentation" <?if($page == 'howto'):?>class="active"<?endif;?>><a href="/howto.php">HowTo</a></li>
-            <li role="presentation" <?if($page == 'about'):?>class="active"<?endif;?>><a href="/about.php">About</a></li>
+            <li role="presentation" <?if($page == 'new_post'):?>class="active"<?endif;?>><a href="/me/new_post.php">Make a post</a></li>
+            <li role="presentation" <?if($page == 'posts'):?>class="active"<?endif;?>><a href="/me/posts.php">My Posts</a></li>
+            <li role="presentation" <?if($page == 'new_blogger'):?>class="active"<?endif;?>><a href="/me/new_blogger.php">Make a Blogger</a></li>
+            <li role="presentation" <?if($page == 'bloggers'):?>class="active"<?endif;?>><a href="/me/bloggers.php">My Bloggers</a></li>
+            <li role="presentation"><a href="/">BACK &gt; &gt; &gt;</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container" id='container-main'>

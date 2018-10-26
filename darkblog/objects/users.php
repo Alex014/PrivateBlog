@@ -105,4 +105,104 @@ class users {
         //var_dump($insert_users);
         $this->insertUsers($insert_users);
     }
+    
+    public function getMyUsers() {
+        $bloggers = \darkblog\lib\emercoin::name_list_filtered("blogger:", 'base64');
+        
+        return array_map(function($blogger) {
+            $blogger['value'] = base64_decode($blogger['value']);
+            $name = explode(':', $blogger['name']);
+            $blogger['name'] = $name[1];
+            
+            $vars = \darkblog\lib\parser::parse($blogger['value']);
+            $blogger['content'] = $vars['content'];
+            $blogger['key'] = $vars['key'];
+            $blogger['sig'] = $vars['sig'];
+            
+            return $blogger;
+        }, $bloggers);
+    }
+    
+    
+    public function signBlogger($username, $userkey) {
+        return \darkblog\lib\emercoin::signmessage($userkey, $username);
+    }
+    
+    /**
+     * 
+     * @param type $username
+     * @param type $post_name
+     * @param type $userkey
+     * @return type
+     */
+    public function signPost($username, $post_name, $userkey) {
+        return \darkblog\lib\emercoin::signmessage($userkey, "$username:$post_name");
+    }
+    
+    public function newUser($name, $data, $days) {
+        $name = 'blogger:'.$name;
+        $value = '';
+        
+        if(!empty($data['descr'])) {
+            $value = $data['descr'];
+        }
+        
+        if(!empty($data['key']) && !empty($data['sig'])) {
+            $value = $value.' @key="'.$data['key'].'"'.' @sig="'.$data['sig'].'"';
+        }
+        
+        \darkblog\lib\emercoin::name_new($name, $value, $days);
+    }
+    
+    public function editUser($name, $data, $days) {
+        $name = 'blogger:'.$name;
+        $value = '';
+        
+        if(!empty($data['descr'])) {
+            $value = $data['descr'];
+        }
+        
+        if(!empty($data['key']) && !empty($data['sig'])) {
+            $value = $value.' @key="'.$data['key'].'"'.' @sig="'.$data['sig'].'"';
+        }
+        
+        \darkblog\lib\emercoin::name_update($name, $value, $days);
+    }
+    
+    public function deleteUser($name) {
+        $name = 'blogger:'.$name;
+        
+        \darkblog\lib\emercoin::name_delete($name);
+    }
+    
+    public function getUserData($name) {
+        $full_name = 'blogger:'.$name;
+        //var_dump($name);
+        $dt = \darkblog\lib\emercoin::name_show($full_name);
+        //var_dump($dt);
+        $data = \darkblog\lib\parser::parse($dt['value'], false);
+        //var_dump($data);
+        $data['username'] = $name;
+        $data['time'] = $dt['time'];
+        $data['expires_in'] = $dt['expires_in'];
+        
+        $data['_days'] = $dt['expires_in']/175;
+        $post['expired'] = ($post['expires_in'] < 0);
+        
+        if($data['expires_in'] > 0) {
+            $data['created'] = date('Y-m-d H:i:s', $data['time']);
+            $data['expires'] = date('Y-m-d H:i:s', $data['time'] + round($data['_days']*86400));
+        }
+        else {
+            $data['created'] = date('Y-m-d H:i:s', $data['time']);
+            $data['expires'] = date('Y-m-d H:i:s', time() + round($data['_days']*86400));
+        }
+        
+        $data['days'] = ceil($dt['expires_in']/175);
+        if($data['days'] < 1) $data['days'] = 1;
+        
+        $data['content'] = trim($data['content']);
+        //var_dump($data);
+        return $data;
+    }
 }

@@ -295,4 +295,77 @@ class posts {
             $oposts->updateVerified($post['id']);
         }
     }
+    
+    public function getMyPosts() {
+        $posts = \darkblog\lib\emercoin::name_list_filtered("blog:", 'base64');
+        
+        $posts = array_map(function($post) {
+            $post['value'] = base64_decode($post['value']);
+            $post['vars'] = \darkblog\lib\parser::parse($post['value']);
+            $name = explode(':', $post['name']);
+            $post['name'] = $name[1];
+            
+            $post['expires_in_days'] = ceil($post['expires_in']/175);
+            
+            return $post;
+        }, $posts);
+        
+        return array_reverse($posts);
+    }
+    
+    public function newPost($name, $content, $vars, $days) {
+        $build_output = \darkblog\lib\parser::build($content, $name, $vars);
+        //var_dump($build_output); die();
+        foreach ($build_output as $index => $value) {
+            echo $index;
+            if($index == 0) {
+                \darkblog\lib\emercoin::name_new('blog:'.$name, $value, $days, 'base64', 'base64');
+            }
+            else {
+                \darkblog\lib\emercoin::name_new('blog:'.$name.'_'.$index, $value, $days, 'base64', 'base64');
+            }
+        }
+    }
+    
+    public function editPost($name, $content, $vars, $days) {
+        $build_output = \darkblog\lib\parser::build($content, $name, $vars);
+        
+        \darkblog\lib\emercoin::name_update('blog:'.$name, $build_output[0], $days, 'base64', 'base64');
+    }
+    
+    public function deletePost($name) {
+        $name = 'blog:'.$name;
+        
+        \darkblog\lib\emercoin::name_delete($name);
+    }
+    
+    public function getPostData($name) {
+        $full_name = 'blog:'.$name;
+        
+        $post = \darkblog\lib\emercoin::name_show($full_name);
+        
+        $vars = \darkblog\lib\parser::parse($post['value'], false);
+        $post['name'] = $name;
+        
+        $post['_days'] = $post['expires_in']/175;
+        $post['expired'] = ($post['expires_in'] < 0);
+        
+        if($post['expires_in'] > 0) {
+            $post['created'] = date('Y-m-d H:i:s', $post['time']);
+            $post['expires'] = date('Y-m-d H:i:s', $post['time'] + round($post['_days']*86400));
+        }
+        else {
+            $post['created'] = date('Y-m-d H:i:s', $post['time']);
+            $post['expires'] = date('Y-m-d H:i:s', time() + round($post['_days']*86400));
+        }
+        
+        $post['days'] = ceil($post['expires_in']/175);
+        if($post['days'] < 1) $post['days'] = 1;
+        
+        $post += $vars;
+        
+        $post['content'] = trim($post['content']);
+        //var_dump($post);
+        return $post;
+    }
 }

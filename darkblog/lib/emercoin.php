@@ -57,6 +57,26 @@ class emercoin {
     return self::$rpcClient->getaccountaddress($account);
   }
   
+  public static function listaccounts() {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    self::$emercoin_info = self::$rpcClient->getinfo();
+    
+    return self::$rpcClient->listaccounts();
+  }
+  
+  public static function listAccountsAddresses() {  
+    $accounts = \darkblog\lib\emercoin::listaccounts();
+    $result = array();
+      
+    foreach ($accounts as $account => $ammount) {
+        $result[$account] = \darkblog\lib\emercoin::getAddressesByAccount($account);
+    }
+    
+    return $result;
+  }
+  
   /**
    * All Addresses by account
    * @param type $account
@@ -277,7 +297,7 @@ class emercoin {
     $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
     self::$rpcClient = new jsonRPCClient($url, self::$debug);
     
-    return self::$rpcClient->verifymessage($emercoinaddress, $signature, $message);
+    return self::$rpcClient->verifymessage($emercoinaddress, $signature, (string)$message);
   }
 
   /**
@@ -345,11 +365,42 @@ class emercoin {
    * @param type $valuetype
    * @return type
    */
-  public static function name_scan( $start_name, $max_returned, $max_value_length=-1, $valuetype) {
+  public static function name_scan( $start_name, $max_returned, $max_value_length=-1, $valuetype='') {
     $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
     self::$rpcClient = new jsonRPCClient($url, self::$debug);
     
-    return self::$rpcClient->name_scan($start_name, $max_returned, $max_value_length=-1, $valuetype);
+    return self::$rpcClient->name_scan($start_name, $max_returned, $max_value_length, $valuetype);
+  }
+  
+    /**
+   * List my own names.
+   * @param type $name (string, required) Restrict output to specific name
+   * @param type $valuetype (string, optional) If "hex" or "base64" is specified then it will print value in corresponding format instead of string.
+   * @return type
+   */
+  public static function name_list( $name, $valuetype='') {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    return self::$rpcClient->name_list($name, $valuetype);
+  }
+  
+  /**
+   * List my own names (filtered).
+   * @param type $name_start first part of a name
+   * @param type $valuetype
+   */
+  public static function name_list_filtered( $name_start, $valuetype='') {
+      $records = self::name_list("", $valuetype);
+      $result = array();
+      
+      foreach ($records as $record) {
+          if(strpos($record['name'], $name_start) === 0) {
+              $result[] = $record;
+          }
+      }
+      
+      return $result;
   }
   
   /**
@@ -376,6 +427,46 @@ class emercoin {
     
   }
   
+  public static function name_new($name, $value, $days, $toaddress = '', $valuetype = "") {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    return self::$rpcClient->name_new($name, $value, $days);
+    
+    if(!empty($toaddress)) {
+        return self::$rpcClient->name_new($name, $value, $days, $toaddress);
+    }
+    elseif(!empty($valuetype)) {
+        return self::$rpcClient->name_new($name, $value, $days, $toaddress, $valuetype);
+    }
+    else {
+        return self::$rpcClient->name_new($name, $value, $days);
+    }
+  }
+  
+  public static function name_update( $name, $value, $days, $toaddress='', $valuetype='') {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    return self::$rpcClient->name_update($name, $value, $days);
+    
+    if(!empty($toaddress)) {
+        return self::$rpcClient->name_update($name, $value, $days, $toaddress);
+    }
+    elseif(!empty($valuetype)) {
+        return self::$rpcClient->name_update($name, $value, $days, $toaddress, $valuetype);
+    }
+    else {
+        return self::$rpcClient->name_update($name, $value, $days);
+    }
+  }
+  
+  public static function name_delete( $name ) {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    return self::$rpcClient->name_delete( $name );
+  }
 }
 
 /**

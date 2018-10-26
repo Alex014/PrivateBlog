@@ -6,7 +6,7 @@
               <h3 class="panel-title"><?=nl2br(strip_tags($post['title']))?></h3>
             </div>
             <div class="panel-body">
-                <?=nl2br($post['content'])?>
+                <?=nl2br(trim($post['content']))?>
             </div>
         </div>
     </div>
