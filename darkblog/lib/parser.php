@@ -124,8 +124,7 @@ class parser {
         foreach ($vars as $key => $value) {
             $key = str_replace(array('"',"'",'@'), '', $key);
             $value = str_replace(array('"',"'",'@'), '', $value);
-            $text .= "\r\n"."\r\n";
-            $text .= "\r\n"."@$key=\"$value\"";
+            $text .= " @$key=\"$value\" ";
         }
         
         return $text;

@@ -319,10 +319,10 @@ class posts {
         foreach ($build_output as $index => $value) {
             echo $index;
             if($index == 0) {
-                \darkblog\lib\emercoin::name_new('blog:'.$name, $value, $days, 'base64', 'base64');
+                \darkblog\lib\emercoin::name_new('blog:'.$name, $value, $days, '', '');
             }
             else {
-                \darkblog\lib\emercoin::name_new('blog:'.$name.'_'.$index, $value, $days, 'base64', 'base64');
+                \darkblog\lib\emercoin::name_new('blog:'.$name.'_'.$index, $value, $days, '', '');
             }
         }
     }
@@ -330,7 +330,7 @@ class posts {
     public function editPost($name, $content, $vars, $days) {
         $build_output = \darkblog\lib\parser::build($content, $name, $vars);
         
-        \darkblog\lib\emercoin::name_update('blog:'.$name, $build_output[0], $days, 'base64', 'base64');
+        \darkblog\lib\emercoin::name_update('blog:'.$name, $build_output[0], $days, '', '');
     }
     
     public function deletePost($name) {

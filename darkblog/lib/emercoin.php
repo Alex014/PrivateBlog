@@ -431,7 +431,7 @@ class emercoin {
     $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
     self::$rpcClient = new jsonRPCClient($url, self::$debug);
     
-    return self::$rpcClient->name_new($name, $value, $days);
+    //return self::$rpcClient->name_new($name, $value, $days);
     
     if(!empty($toaddress)) {
         return self::$rpcClient->name_new($name, $value, $days, $toaddress);
@@ -444,11 +444,31 @@ class emercoin {
     }
   }
   
+  public static function names_new($values, $days, $toaddress = '', $valuetype = "") {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    //return self::$rpcClient->name_new($name, $value, $days);
+    
+    if(!empty($toaddress)) {
+        foreach ($values as $name => $value)
+            self::$rpcClient->name_new($name, $value, $days, $toaddress);
+    }
+    elseif(!empty($valuetype)) {
+        foreach ($values as $name => $value)
+            self::$rpcClient->name_new($name, $value, $days, $toaddress, $valuetype);
+    }
+    else {
+        foreach ($values as $name => $value)
+            self::$rpcClient->name_new($name, $value, $days);
+    }
+  }
+  
   public static function name_update( $name, $value, $days, $toaddress='', $valuetype='') {
     $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
     self::$rpcClient = new jsonRPCClient($url, self::$debug);
     
-    return self::$rpcClient->name_update($name, $value, $days);
+    //return self::$rpcClient->name_update($name, $value, $days);
     
     if(!empty($toaddress)) {
         return self::$rpcClient->name_update($name, $value, $days, $toaddress);
