@@ -7,6 +7,7 @@ The blockchain values from NVS gets parsed by this aggregator using @key="value"
 
 ## Do bloging through web interface
 Finally added ability to make records not through Emercoin wallet, but through Private Blog WEB interface
+Added editor and display of multiple replies
 
 ## Register a blogger (optional)
 1. Create a record named blogger:username in emercoin NVS
@@ -76,6 +77,7 @@ Max level of subposts is 5
 
 ###### MeekroDB http://meekro.com/
 ###### Bootstrap http://getbootstrap.com/
+###### Summernote editor https://summernote.org
 
 ## Donate
 
