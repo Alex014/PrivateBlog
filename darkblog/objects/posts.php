@@ -48,6 +48,24 @@ class posts {
         $oposts = new \darkblog\db\posts();
         return $oposts->getReplies($post_id);
     }
+    public function getRepliesFull($post_id) {
+        $oposts = new \darkblog\db\posts();
+        $replies = $oposts->getReplies($post_id);
+        
+        function replies_recursive(&$replies) {
+            $oposts = new \darkblog\db\posts();
+        
+            foreach($replies as $index => $reply) {
+                $replies[$index]['children'] = $oposts->getReplies($reply['id']);
+                if(!empty($replies[$index]['children']))
+                    replies_recursive($replies[$index]['children']);
+            }
+        }
+        
+        replies_recursive($replies);
+        
+        return $replies;
+    }
     
     public function searchPostsByTitle($title) {
         $oposts = new \darkblog\db\posts();
@@ -368,4 +386,28 @@ class posts {
         //var_dump($post);
         return $post;
     }
+    
+    /*public function getPostFull($post_id) {
+        $oposts = new \darkblog\db\posts();
+        $okeywords = new \darkblog\db\keywords();
+        $ousers = new \darkblog\db\users();
+        
+        $post = $oposts->get($post_id);
+        $post['_keywords'] = $post['keywords'];
+        $lang_id = $_SESSION['lang'];
+        $post['keywords'] = $okeywords->selectByPost($post_id, $lang_id);
+        if(!empty($post['user_id']))
+            $post['user'] = $ousers->get($post['user_id']);
+        
+        return $post;
+    }
+    
+    public function getPostByNameFull($post_name) {
+        $oposts = new \darkblog\db\posts();
+        
+        $post = $oposts->getByName($post_name);
+        
+        return $this->getPostFull($post['id']);
+    }*/
+    
 }

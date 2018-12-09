@@ -4,7 +4,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title"><?=nl2br(strip_tags($post['title']))?></h3>
-              <a href="/post.php?name=<?=$post['name']?>&full" style="position: absolute; right: 32px; top: 10px;">[Show Full]</a>
+              <a href="/post.php?name=<?=$post['name']?>" style="position: absolute; right: 32px; top: 10px;">[Show simple]</a>
             </div>
             <div class="panel-body">
                 <?=nl2br(trim($post['content']))?>
@@ -107,33 +107,60 @@
 </div>
 <? endif; ?>
 
-<? if(!empty($post['reply_id'])): ?>
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Reply to ...</h3>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Title</th>
-                        <th>Keywords</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td> <a href="/post.php?name=<?=$post['reply_to']['name']?>"> <?=nl2br(strip_tags($post['reply_to']['name']))?> </a> </td>
-                        <td><?=nl2br(strip_tags($post['reply_to']['title']))?></td>
-                        <td><?=$post['reply_to']['_keywords']?></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<? endif; ?>
+<?php
+
+function replies_recursive($replies, $level = 1) {
+    $oposts = new \darkblog\db\posts();
+
+    foreach($replies as $index => $reply) {
+        $replies[$index]['children'] = $oposts->getReplies($reply['id']);
+        
+        echo '<div class="panel panel-default" style="margin: 2px; margin-left: 20px">';
+        echo '<div class="panel-heading">';
+        
+        echo "<a href='/post.php?name=$reply[name]' target='_blank'> ";
+        
+        if(!empty($reply['title'])) {
+            echo nl2br(strip_tags($reply['title'])); 
+        } else {
+            echo nl2br(strip_tags($reply['name']));
+        }
+        
+        if(count($replies[$index]['children']) > 0)
+            echo ' <b>['.count($replies[$index]['children']).']</b>';
+        
+        echo "</a>";
+        
+        if($level == 1)
+            echo "<a href=# class='expand' data-id='$reply[id]' data-visible='1' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-minus'/></a>";
+        else
+            echo "<a href=# class='expand' data-id='$reply[id]' data-visible='0' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-plus'/></a>";
+        echo "</div>";
+        
+        if($level == 1)
+            echo '<div id="content_'.$reply[id].'">'.$reply['content'].'</div>';
+        else
+            echo '<div id="content_'.$reply[id].'" style="display: none;">'.$reply['content'].'</div>';
+        
+        $replies[$index]['children'] = $oposts->getReplies($reply['id']);
+        
+        
+        if($level == 1)
+            echo '<div id="replies_'.$reply[id].'">';
+        else
+            echo '<div id="replies_'.$reply[id].'" style="display: none;">';
+        
+                    
+        if(!empty($reply['children']))
+            replies_recursive($reply['children'], $level+1);
+        
+        echo "</div>";
+        
+        echo "</div>";
+    }
+}
+
+?>
 
 <? if(!empty($post['replies'])): ?>
 <div class="row">
@@ -142,24 +169,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">Replies to this post</h3>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Title</th>
-                        <th>Keywords</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <? foreach($post['replies'] as $post): ?>
-                    <tr>
-                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['name']))?> </a> </td>
-                        <td><?=nl2br(strip_tags($post['title']))?></td>
-                        <td><?=$post['keywords']?></td>
-                    </tr>
-                    <? endforeach; ?>
-                </tbody>
-            </table>
+            <?=replies_recursive($post['replies'])?>
         </div>
     </div>
 </div>

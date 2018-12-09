@@ -38,12 +38,21 @@
   </div>
     
   <div class="form-group">
-    <label for="content">Post content</label>
-    <textarea class="form-control" name="content" id="content" style="width: 100%; height: 400px;" validate="required"></textarea>
+    <label for="content">Post content  <a href="#" type="submit" class="btn btn-info" id="editor" data-enabled="1">EDITOR</a> </label>
+    <textarea class="form-control summernote" name="content" id="content" style="width: 100%; height: 400px;" validate="required"></textarea>
   </div>
 
   <button type="submit" class="btn btn-default">Submit</button>
+  
+  <br/>
+  <br/>
+  <br/>
+  <br/>
 </form>
+
+<!-- include summernote css/js -->
+<link href="/css/summernote.css" rel="stylesheet">
+<script src="/js/summernote.min.js"></script>
 
 
 <script type="text/javascript">
@@ -79,7 +88,34 @@ $(document).on('change', '#name', function() {
     $('#bloggers').trigger('change');
 })
 
+function summernote() {
+    $('.summernote').summernote({height: 200,  toolbar: [
+        // [groupName, [list of button]]
+        ['style', ['style', 'bold', 'italic', 'underline']],
+        ['misc', ['undo','redo']],
+        ['font', ['fontsize','color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['other', ['link', 'hr','table','picture']],
+        ['screen', ['codeview', 'fullscreen']]
+      ]});
+}
+
 $(document).ready(function() {
-     $('#form').bt_validate();
+    summernote()
+    $('#form').bt_validate();
+})
+
+
+$(document).on('click', '#editor', function() {
+    if($(this).data('enabled') == '1') {
+        $('.summernote').summernote('destroy');
+        $(this).data('enabled', '0')
+    }
+    else {
+        summernote()
+        $(this).data('enabled', '1')
+    }
+    
+    return false;
 })
 </script>

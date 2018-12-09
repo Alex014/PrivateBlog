@@ -43,11 +43,16 @@
   </div>
     
   <div class="form-group">
-    <label for="content">Post content</label>
-    <textarea class="form-control" name="content" id="content" style="width: 100%; height: 400px;" validate="required"><?=$post['content']?></textarea>
+    <label for="content">Post content  <a href="#" type="submit" class="btn btn-info" id="editor" data-enabled="0">EDITOR</a> </label>
+    <textarea class="form-control summernote" name="content" id="content" style="width: 100%; height: 400px;" validate="required"><?=$post['content']?></textarea>
   </div>
 
     <input class="form-control" name="action" id="action" value="edit" type="hidden">
+  
+  <br/>
+  <br/>
+  <br/>
+  <br/>
         
 </form>
 
@@ -61,7 +66,17 @@
 <?else:?>
     <button type="submit" class="btn btn-info" id="do_edit">UPDATE</button>
     <button type="submit" class="btn btn-danger" id="do_delete">DELETE</button>
+  
+  <br/>
+  <br/>
+  <br/>
+  <br/>
 <?endif;?>
+
+<!-- include summernote css/js -->
+<link href="/css/summernote.css" rel="stylesheet">
+<script src="/js/summernote.min.js"></script>
+
 
 <script type="text/javascript">
 $.getJSON("/me/bloggers.php", {action: 'bloggers'}, function(data) {
@@ -123,5 +138,32 @@ $(document).on('click', '#do_delete', function() {
         $('#action').val('delete')
         $('#form').submit();
     }
+})
+
+$(document).ready(function() {
+    $('#form').bt_validate();
+})
+
+
+$(document).on('click', '#editor', function() {
+    if($(this).data('enabled') == '1') {
+        $('.summernote').summernote('destroy');
+        $(this).data('enabled', '0')
+    }
+    else {
+        $('.summernote').summernote({height: 200,  toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['style', 'bold', 'italic', 'underline']],
+            ['misc', ['undo','redo']],
+            ['font', ['fontsize','color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['other', ['link', 'hr','table','picture']],
+            ['screen', ['codeview', 'fullscreen']]
+          ]});
+        
+        $(this).data('enabled', '1')
+    }
+    
+    return false;
 })
 </script>
