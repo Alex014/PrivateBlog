@@ -65,6 +65,7 @@ class posts {
         replies_recursive($replies);
         
         return $replies;
+        
     }
     
     public function searchPostsByTitle($title) {

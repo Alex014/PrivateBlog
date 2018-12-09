@@ -84,6 +84,7 @@ else {
 
 require 'templates/footer.php';
 
+
 if((!empty($_GET['name']) || !empty($_GET['id'])) && isset($_GET['full'])) {
     require 'templates/post_full_footer.php';
 }

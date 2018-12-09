@@ -4,7 +4,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title"><?=nl2br(strip_tags($post['title']))?></h3>
-              <a href="/post.php?name=<?=$post['name']?>&full" style="position: absolute; right: 32px; top: 10px;">[Show Full]</a>
+              <a href="/post.php?name=<?=$post['name']?>&full" style="position: absolute; right: 32px; top: 10px;"> [Show Full] </a>
             </div>
             <div class="panel-body">
                 <?=nl2br(trim($post['content']))?>

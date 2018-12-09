@@ -7,6 +7,7 @@ The blockchain values from NVS gets parsed by this aggregator using @key="value"
 
 ## Do bloging through web interface
 Finally added ability to make records not through Emercoin wallet, but through Private Blog WEB interface
+
 Added editor and display of multiple replies
 
 ## Register a blogger (optional)

@@ -14,5 +14,6 @@ $(document).on('click', '.expand', function() {
     }
     
     return false;
+    
 })
 </script>

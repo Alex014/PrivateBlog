@@ -159,7 +159,6 @@ function replies_recursive($replies, $level = 1) {
         echo "</div>";
     }
 }
-
 ?>
 
 <? if(!empty($post['replies'])): ?>
