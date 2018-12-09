@@ -153,12 +153,12 @@ class parser {
 
             $text_final = '';
             $atext_final = array();
-            $atext = preg_split("/\r\n|\n|\r/", $text);
+            $atext = preg_split("/\s+/", $text);
             
             $next_part = '';
             foreach ($atext as $part) {
-                if(strlen($next_part.PHP_EOL.$part) < self::$BLOCK_SIZE) {
-                    $next_part .= PHP_EOL.$part;
+                if(strlen($next_part.' '.$part) < self::$BLOCK_SIZE) {
+                    $next_part .= ' '.$part;
                 }
                 else {
                     $atext_final[] = $next_part;
