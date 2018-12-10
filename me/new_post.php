@@ -67,6 +67,13 @@ if(!empty($_POST['content']) && !empty($_POST['name'])) {
     die();
 }
 
+if(!empty($_GET['reply'])) {
+    $__reply = $_GET['reply'];
+}
+else {
+    $__reply = '';
+}
+
 require 'templates/posts_new.php';
 
 require 'templates/footer.php';

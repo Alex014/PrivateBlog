@@ -143,6 +143,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">Replies to this post</h3>
+              <a href="/me/new_post.php?reply=<?=$post['name']?>" style="position: absolute; right: 32px; top: 10px;" target='_blank'> [REPLY to this POST] </a>
             </div>
             <table class="table">
                 <thead>
@@ -155,9 +156,12 @@
                 <tbody>
                     <? foreach($post['replies'] as $post): ?>
                     <tr>
-                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['name']))?> </a> </td>
+                        <td>
+                            <a href="/post.php?name=<?=$post['name']?>" target='_blank'> <?=nl2br(strip_tags($post['name']))?> </a>
+                        </td>
                         <td><?=nl2br(strip_tags($post['title']))?></td>
                         <td><?=$post['keywords']?></td>
+                        <td align="right"><a href="/me/new_post.php?reply=<?=$post['name']?>" target='_blank'> [REPLY] </a></td>
                     </tr>
                     <? endforeach; ?>
                 </tbody>

@@ -131,6 +131,8 @@ function replies_recursive($replies, $level = 1) {
         
         echo "</a>";
         
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/me/new_post.php?reply=$reply[name]' target='_blank'> <b>[REPLY]</b> </a>";
+        
         if($level == 1)
             echo "<a href=# class='expand' data-id='$reply[id]' data-visible='1' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-minus'/></a>";
         else
@@ -141,6 +143,8 @@ function replies_recursive($replies, $level = 1) {
             echo '<div id="content_'.$reply[id].'">'.$reply['content'].'</div>';
         else
             echo '<div id="content_'.$reply[id].'" style="display: none;">'.$reply['content'].'</div>';
+        
+        echo "<center></center>";
         
         $replies[$index]['children'] = $oposts->getReplies($reply['id']);
         
@@ -167,6 +171,7 @@ function replies_recursive($replies, $level = 1) {
         <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">Replies to this post</h3>
+              <a href="/me/new_post.php?reply=<?=$post['name']?>" style="position: absolute; right: 32px; top: 10px;" target='_blank'> [REPLY to this POST] </a>
             </div>
             <?=replies_recursive($post['replies'])?>
         </div>

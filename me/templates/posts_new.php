@@ -34,7 +34,7 @@
   </div>
   <div class="form-group">
       <label for="reply">Reply <small>(the name of the post you want to reply to (optional))</small></label>
-    <input class="form-control" name="reply" id="reply">
+    <input class="form-control" name="reply" id="reply" value="<?=$__reply?>">
   </div>
     
   <div class="form-group">
