@@ -83,6 +83,7 @@ $.getJSON("/me/bloggers.php", {action: 'bloggers'}, function(data) {
     users = data;
     
     var html = "<select id='bloggers'>";
+    html += "<option value=''> [Anonymous] </option>";
     for(var i in data) {
         if(data[i].key != null)
         html += "<option value='"+i+"'>"+data[i].name+"</option>";
@@ -117,6 +118,10 @@ $(document).on('change', '#bloggers', function() {
             //console.log(sig)
             $('#sig').val(sig)
         })
+    }
+    else {
+        $('#username').val('');
+        $('#sig').val('')
     }
 })
 
