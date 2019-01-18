@@ -50,16 +50,18 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Title</th>
+                        <th>Name / Title</th>
                         <th>Keywords</th>
                     </tr>
                 </thead>
                 <tbody>
                     <? foreach($user['users_posts'] as $post): ?>
+                    <?php 
+                    if(! empty($post['title'])) $title = $post['title']; else $title = $post['name'];
+                    ?>
                     <tr>
-                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['name']))?> </a> </td>
-                        <td><?=nl2br(strip_tags($post['title']))?></td>
+                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($title))?> </a> </td>
+                        <td><?=nl2br(strip_tags($title))?></td>
                         <td><?=$post['keywords']?></td>
                     </tr>
                     <? endforeach; ?>

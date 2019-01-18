@@ -5,7 +5,7 @@
             <div class="panel-heading">
               <h3 class="panel-title"><?=nl2br(strip_tags($post['title']))?></h3>
               <? if(!empty($post['replies'])): ?>
-              <a href="/post.php?name=<?=$post['name']?>&full" style="position: absolute; right: 32px; top: 10px;"> [Show Full] </a>
+              <a href="/post.php?name=<?=$post['name']?>&full#replies" style="position: absolute; right: 32px; top: 10px;"> [Show Full] </a>
               <? endif; ?>
             </div>
             <div class="panel-body">
@@ -141,6 +141,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
+            <a name="replies"></a>
             <div class="panel-heading">
               <h3 class="panel-title">Replies to this post</h3>
               <a href="/me/new_post.php?reply=<?=$post['name']?>" style="position: absolute; right: 32px; top: 10px;" target='_blank'> [REPLY to this POST] </a>
@@ -148,18 +149,19 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Title</th>
+                        <th>Name / Title</th>
                         <th>Keywords</th>
                     </tr>
                 </thead>
                 <tbody>
                     <? foreach($post['replies'] as $post): ?>
+                    <?php 
+                    if(! empty($post['title'])) $title = $post['title']; else $title = $post['name'];
+                    ?>
                     <tr>
                         <td>
-                            <a href="/post.php?name=<?=$post['name']?>" target='_blank'> <?=nl2br(strip_tags($post['name']))?> </a>
+                            <a href="/post.php?name=<?=$post['name']?>" target='_blank'> <?=nl2br(strip_tags($title))?> </a>
                         </td>
-                        <td><?=nl2br(strip_tags($post['title']))?></td>
                         <td><?=$post['keywords']?></td>
                         <td align="right"><a href="/me/new_post.php?reply=<?=$post['name']?>" target='_blank'> [REPLY] </a></td>
                     </tr>
