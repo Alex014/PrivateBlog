@@ -119,15 +119,18 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Title</th>
+                        <th>Name / Title</th>
                         <th>Keywords</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php 
+                    if(! empty($post['reply_to']['title'])) $title = $post['reply_to']['title']; else $title = $post['reply_to']['name'];
+                    ?>
                     <tr>
-                        <td> <a href="/post.php?name=<?=$post['reply_to']['name']?>"> <?=nl2br(strip_tags($post['reply_to']['name']))?> </a> </td>
-                        <td><?=nl2br(strip_tags($post['reply_to']['title']))?></td>
+                        <td>
+                            <a href="/post.php?name=<?=$post['reply_to']['name']?>" target='_blank'> <?=nl2br(strip_tags($title))?> </a>
+                        </td>
                         <td><?=$post['reply_to']['_keywords']?></td>
                     </tr>
                 </tbody>
