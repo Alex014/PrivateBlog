@@ -42,7 +42,7 @@ class baseTable {
     }
     
     public function escape($value) {
-        return '"'.mysql_escape_string($value).'"';
+        return '"'.\DB::getMDB()->get()->escape_string($value).'"';
     }
     
     public function select($condition) {

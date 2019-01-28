@@ -151,6 +151,7 @@ SQL;
             LEFT JOIN $this->table_users U ON (P.user_id = U.id)
             WHERE $condition AND P.title LIKE $title OR P.name LIKE $title
 SQL;
+        //echo $sql;
         return pager::pagedQuery($sql);
     }
     
@@ -165,7 +166,7 @@ SQL;
         return pager::pagedQuery($sql);
     }
     
-    public function selectByContentMultiple($words_or, $words_and, $lang_id) {
+    public function selectByContentMultiple($words_and, $words_or, $lang_id) {
         $lang_id = (int)$lang_id;
         $scondition = '1';
         if($lang_id > 0) $scondition = 'P.lang_id = '.(int)$lang_id;
@@ -177,24 +178,27 @@ SQL;
             WHERE $scondition
 SQL;
         
-        if(!empty($words_or)) {
-            foreach ($words_or as $word) {
-                $word = $this->escape("%$word%");
-                $sql[] = $_sql . ' AND ' . " P.content LIKE $word ";
-            }
-        }
-
         if(!empty($words_and)) {
             foreach ($words_and as $word) {
                 $word = $this->escape("%$word%");
-                $condition[] = " P.content LIKE $word ";
+                $condition[] = " (P.title LIKE $word OR P.name LIKE $word OR P.content LIKE $word) ";
             }
             $condition = implode(' AND ', $condition);
             $sql[] = $_sql . ' AND ' . $condition;
         }
 
+        if(!empty($words_or)) {
+            foreach ($words_or as $word) {
+                $word = $this->escape("%$word%");
+                $condition[] = " (P.title LIKE $word OR P.name LIKE $word OR P.content LIKE $word) ";
+            }
+            $condition = implode(' OR ', $condition);
+            $sql[] = $_sql . ' AND ' . $condition;
+        }
+
         if(!empty($sql)) {
             $sql = implode(" \n UNION \n ", $sql);
+            //echo $sql;
             return pager::pagedQuery($sql);
         }
         else {

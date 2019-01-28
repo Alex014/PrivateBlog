@@ -81,9 +81,14 @@ class posts {
         }
         
         if(!empty($post_ids))
-            $keywords = $okeywords->selectByPosts($post_ids, $lang_id);
+            $_keywords = $okeywords->selectByPosts($post_ids, $lang_id);
         else
-            $keywords = array();
+            $_keywords = array();
+        
+        //pARSING KEYWORDS
+        foreach ($_keywords as $keyword) {
+            $keywords[$keyword['id']] = $keyword;
+        }
         
         return array('posts' => $posts, 'keywords' => $keywords);
     }
@@ -101,9 +106,14 @@ class posts {
         }
         
         if(!empty($post_ids))
-            $keywords = $okeywords->selectByPosts($post_ids, $lang_id);
+            $_keywords = $okeywords->selectByPosts($post_ids, $lang_id);
         else
-            $keywords = array();
+            $_keywords = array();
+        
+        //pARSING KEYWORDS
+        foreach ($_keywords as $keyword) {
+            $keywords[$keyword['id']] = $keyword;
+        }
         
         return array('posts' => $posts, 'keywords' => $keywords);
     }
@@ -117,7 +127,7 @@ class posts {
         }
         
         $lang_id = $_SESSION['lang'];
-        $posts = $oposts->selectByContentMultiple($any_words, $all_words, $lang_id);
+        $posts = $oposts->selectByContentMultiple($all_words, $any_words, $lang_id);
         
         $post_ids = array();
         foreach ($posts as $post) {
@@ -125,10 +135,15 @@ class posts {
         }
         
         if(!empty($post_ids))
-            $keywords = $okeywords->selectByPosts($post_ids, $lang_id);
+            $_keywords = $okeywords->selectByPosts($post_ids, $lang_id);
         else
-            $keywords = array();
+            $_keywords = array();
         
+        //pARSING KEYWORDS
+        foreach ($_keywords as $keyword) {
+            $keywords[$keyword['id']] = $keyword;
+        }
+
         return array('posts' => $posts, 'keywords' => $keywords);
     }
     

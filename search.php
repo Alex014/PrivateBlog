@@ -34,7 +34,7 @@ elseif(isset($_POST['regexp']) && !empty(trim($_POST['regexp']))) {
     $keywords = $result['keywords'];
     $posted = 'regexp';
 }
-elseif(isset($_POST['allwords']) && isset($_POST['anywords']) && !empty(trim($_POST['allwords'])) && !empty(trim($_POST['anywords']))) {
+elseif(isset($_POST['allwords']) && isset($_POST['anywords'])) {
     $all_words = array();
     $any_words = array();
     
@@ -51,6 +51,7 @@ elseif(isset($_POST['allwords']) && isset($_POST['anywords']) && !empty(trim($_P
     $keywords = $result['keywords'];
     $posted = 'words';
 }
+
 
 function fvalue($name, $index = -1) {
     if(isset($_POST[$name]) && ($index > -1) && (isset($_POST[$name][$index])))
