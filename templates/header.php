@@ -24,7 +24,9 @@
             <?if($page == 'post'):?>
             <li role="presentation" class="active"><a href="#"><?=text::cut($post['title'], 42)?></a></li>
             <?endif;?>
+            <?if(\config::$editable):?>
             <li role="presentation"><a href="/me">MAKE A POST</a></li>
+            <?endif;?>
             <li role="presentation" <?if($page == 'config'):?>class="active"<?endif;?>><a href="/config.php">Config</a></li>
             <li role="presentation" <?if($page == 'howto'):?>class="active"<?endif;?>><a href="/howto.php">HowTo</a></li>
             <li role="presentation"><a href=# id="sync">SYNC</a></li>
