@@ -19,7 +19,7 @@
           <br>
           <form method="post">
             <div class="input-group">
-                <input type="text" class="form-control" name="title" placeholder="Search by title..." value='<?=fvalue('title')?>'>
+                <input type="text" class="form-control" name="title" placeholder="Search by name and title ..." value='<?=fvalue('title')?>'>
               <span class="input-group-btn">
                 <button class="btn btn-default" type="submit">Search</button>
               </span>
@@ -33,29 +33,29 @@
             <div class="col-md-6">
                       <div class="form-group">
                         <label for="allwords1">All words #1</label>
-                        <input type="text" class="form-control" id="allwords1" placeholder="" name="allwords[]" value='<?=fvalue('allwords', 0)?>'>
+                        <input type="text" class="form-control" id="allwords1" placeholder="Search by name and title ..." name="allwords[]" value='<?=fvalue('allwords', 0)?>'>
                       </div>
                       <div class="form-group">
                         <label for="allwords2">All words #2</label>
-                        <input type="text" class="form-control" id="allwords2" placeholder="" name="allwords[]" value='<?=fvalue('allwords', 1)?>'>
+                        <input type="text" class="form-control" id="allwords2" placeholder="Search by name and title ..." name="allwords[]" value='<?=fvalue('allwords', 1)?>'>
                       </div>
                       <div class="form-group">
                         <label for="allwords3">All words #3</label>
-                        <input type="text" class="form-control" id="allwords3" placeholder="" name="allwords[]" value='<?=fvalue('allwords', 2)?>'>
+                        <input type="text" class="form-control" id="allwords3" placeholder="Search by name and title ..." name="allwords[]" value='<?=fvalue('allwords', 2)?>'>
                       </div>
             </div>
             <div class="col-md-6">
                       <div class="form-group">
                         <label for="anywords1">Any words #1</label>
-                        <input type="text" class="form-control" id="anywords1" placeholder="" name="anywords[]" value='<?=fvalue('anywords', 0)?>'>
+                        <input type="text" class="form-control" id="anywords1" placeholder="Search by name and title ..." name="anywords[]" value='<?=fvalue('anywords', 0)?>'>
                       </div>
                       <div class="form-group">
                         <label for="anywords2">Any words #2</label>
-                        <input type="text" class="form-control" id="anywords2" placeholder="" name="anywords[]" value='<?=fvalue('anywords', 1)?>'>
+                        <input type="text" class="form-control" id="anywords2" placeholder="Search by name and title ..." name="anywords[]" value='<?=fvalue('anywords', 1)?>'>
                       </div>
                       <div class="form-group">
                         <label for="anywords3">Any words #3</label>
-                        <input type="text" class="form-control" id="anywords3" placeholder="" name="anywords[]" value='<?=fvalue('anywords', 2)?>'>
+                        <input type="text" class="form-control" id="anywords3" placeholder="Search by name and title ..." name="anywords[]" value='<?=fvalue('anywords', 2)?>'>
                       </div>
                       <button type="submit" class="btn btn-default" style="float: right;">Search</button>
             </div>
@@ -112,7 +112,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
                         <th>Title</th>
                         <th>Keywords</th>
                     </tr>
@@ -120,8 +119,7 @@
                 <tbody>
                     <? foreach($posts as $post): ?>
                     <tr>
-                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['name']))?> </a> </td>
-                        <td><?=nl2br(strip_tags($post['title']))?></td>
+                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['title']))?> </a> </td>
                         <td><?=$post['keywords']?></td>
                     </tr>
                     <? endforeach; ?>
