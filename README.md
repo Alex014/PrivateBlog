@@ -34,6 +34,9 @@ The result of signmessage "emercoinaddress" "username:postname" command, where e
 * Any post can reply to any other post using @reply keyword 
 * @reply the name of the post you want to reply to
 
+## @ Symbol
+* @@
+
 ## Links to other posts
  #post_name_link_to="link caption"
 
