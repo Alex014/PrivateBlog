@@ -109,58 +109,59 @@
 
 <?php
 
-function replies_recursive($replies, $level = 1) {
+function replies_recursive($replies, $level = 1, $name = '') {
     $oposts = new \darkblog\db\posts();
 
     foreach($replies as $index => $reply) {
-        $replies[$index]['children'] = $oposts->getReplies($reply['id']);
-        
-        echo '<div class="panel panel-default" style="margin: 2px; margin-left: 20px">';
-        echo '<div class="panel-heading">';
-        
-        echo "<a href='/post.php?name=$reply[name]' target='_blank'> ";
-        
-        if(!empty($reply['title'])) {
-            echo nl2br(strip_tags($reply['title'])); 
-        } else {
-            echo nl2br(strip_tags($reply['name']));
+        if(($name == '') || ($name != $reply['name']) || ($level < 33)) {
+            $replies[$index]['children'] = $oposts->getReplies($reply['id']);
+
+            echo '<div class="panel panel-default" style="margin: 2px; margin-left: 20px">';
+            echo '<div class="panel-heading">';
+
+            echo "<a href='/post.php?name=$reply[name]' target='_blank'> ";
+
+            if(!empty($reply['title'])) {
+                echo nl2br(strip_tags($reply['title'])); 
+            } else {
+                echo nl2br(strip_tags($reply['name']));
+            }
+
+            if(count($replies[$index]['children']) > 0)
+                echo ' <b>['.count($replies[$index]['children']).']</b>';
+
+            echo "</a>";
+
+
+            if($level == 1)
+                echo "<a href=# class='expand' data-id='$reply[id]' data-visible='1' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-minus'/></a>";
+            else
+                echo "<a href=# class='expand' data-id='$reply[id]' data-visible='0' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-plus'/></a>";
+            echo "</div>";
+
+            if($level == 1)
+                echo '<div id="content_'.$reply[id].'">'.$reply['content'].'</div>';
+            else
+                echo '<div id="content_'.$reply[id].'" style="display: none;">'.$reply['content'].'</div>';
+
+            echo "<center></center>";
+
+            $replies[$index]['children'] = $oposts->getReplies($reply['id']);
+
+
+            if($level == 1)
+                echo '<div id="replies_'.$reply[id].'">';
+            else
+                echo '<div id="replies_'.$reply[id].'" style="display: none;">';
+
+
+            if(!empty($reply['children']))
+                replies_recursive($reply['children'], $level+1, $name);
+
+            echo "</div>";
+
+            echo "</div>";
         }
-        
-        if(count($replies[$index]['children']) > 0)
-            echo ' <b>['.count($replies[$index]['children']).']</b>';
-        
-        echo "</a>";
-        
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/me/new_post.php?reply=$reply[name]' target='_blank'> <b>[REPLY]</b> </a>";
-        
-        if($level == 1)
-            echo "<a href=# class='expand' data-id='$reply[id]' data-visible='1' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-minus'/></a>";
-        else
-            echo "<a href=# class='expand' data-id='$reply[id]' data-visible='0' style='float: right; font-size: 18px;'><span class='glyphicon glyphicon-plus'/></a>";
-        echo "</div>";
-        
-        if($level == 1)
-            echo '<div id="content_'.$reply[id].'">'.$reply['content'].'</div>';
-        else
-            echo '<div id="content_'.$reply[id].'" style="display: none;">'.$reply['content'].'</div>';
-        
-        echo "<center></center>";
-        
-        $replies[$index]['children'] = $oposts->getReplies($reply['id']);
-        
-        
-        if($level == 1)
-            echo '<div id="replies_'.$reply[id].'">';
-        else
-            echo '<div id="replies_'.$reply[id].'" style="display: none;">';
-        
-                    
-        if(!empty($reply['children']))
-            replies_recursive($reply['children'], $level+1);
-        
-        echo "</div>";
-        
-        echo "</div>";
     }
 }
 ?>
@@ -171,9 +172,8 @@ function replies_recursive($replies, $level = 1) {
         <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">Replies to this post</h3>
-              <a href="/me/new_post.php?reply=<?=$post['name']?>" style="position: absolute; right: 32px; top: 10px;" target='_blank'> [REPLY to this POST] </a>
             </div>
-            <?=replies_recursive($post['replies'])?>
+            <?=replies_recursive($post['replies'], 1, $post['name'])?>
         </div>
     </div>
 </div>

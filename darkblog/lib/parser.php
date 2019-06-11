@@ -40,7 +40,8 @@ class parser {
                 $result[$matches[1]] = $matches[2];
         }
         
-        $result['content'] = mb_eregi_replace('[^@]@(\w+)\s*=\s*[\'"].*?[\'"]', '', $content);
+        $result['content'] = $content;
+        $result['content'] = mb_eregi_replace('[^@]@(\w+)\s*=\s*[\'"].*?[\'"]', '', $result['content']);
         $result['content'] = mb_eregi_replace('^@(\w+)\s*=\s*[\'"].*?[\'"]', '', $result['content']);
         $result['content'] = mb_eregi_replace('[^@]@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);
         $result['content'] = mb_eregi_replace('^@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);

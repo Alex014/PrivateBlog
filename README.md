@@ -66,8 +66,7 @@ Max level of subposts is 5
  $hash_of_file="link caption" - link to file
 
 ## Links
-* Site http://privateblog.net
-* Test page http://104.129.0.142/ (login:blog password:private)
+* DEMO http://192.243.101.161
 * Emercoin http://emercoin.com/
 * Market cap http://coinmarketcap.com/currencies/emercoin/#markets
 * Forum (en) https://bitcointalk.org/index.php?topic=362513.0
