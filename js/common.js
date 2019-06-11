@@ -1,14 +1,18 @@
 $(document).ready(function() {
     $('#sync').click(function() {
-        if(confirm('Sync with blockchain now ?')) {
-            $.get('/sync.php', function(result) {
+        var self = this;
+        $(self).text('Working ...');
+        $.get('/sync.php', function(result) {
+            $(self).text('DONE !');
+            setTimeout(function() {
                 if(result.trim() == 'OK') {
                     window.location.reload();
                 }
                 else {
                     alert(result);
                 }
-            })
-        }
-    })
+            }, 100)
+
+        })
+    });
 })

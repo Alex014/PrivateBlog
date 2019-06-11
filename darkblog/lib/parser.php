@@ -16,30 +16,40 @@ class parser {
      */
     public static function parse($content, $bl2br = true) {
         $matches = array();
-        
         //preg_match_all('/@(\w+).*?=.*?[\'"](.*?)[\'"]/imsr', $content, $matches, PREG_SET_ORDER);
         //mb_eregi('@(\w+).*?=.*?[\'"](.*?)[\'"]', $content, $matches);
-        mb_ereg_search_init($content, '@(\w+)\s*=\s*[\'"](.*?)[\'"]');
+        mb_ereg_search_init($content, '[^@]@(\w+)\s*=\s*[\'"](.*?)[\'"]');
+        while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
+            $result[$matches[1]] = $matches[2];
+        }
+        mb_ereg_search_init($content, '^@(\w+)\s*=\s*[\'"](.*?)[\'"]');
         while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
             $result[$matches[1]] = $matches[2];
         }
 
         //preg_match_all('/@(\w+).*?=.*?([^\s]+)/imsr', $content, $matches, PREG_SET_ORDER);
         //mb_eregi('@(\w+).*?=.*?([^\s]+)', $content, $matches);      
-        mb_ereg_search_init($content, '@(\w+)\s*=\s*([^\s]+)');
+        mb_ereg_search_init($content, '[^@]@(\w+)\s*=\s*([^\s]+)');
         while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
             if(!isset($result[$matches[1]]))
                 $result[$matches[1]] = $matches[2];
         }
-
+        mb_ereg_search_init($content, '^@(\w+)\s*=\s*([^\s]+)');
+        while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
+            if(!isset($result[$matches[1]]))
+                $result[$matches[1]] = $matches[2];
+        }
         
-        $result['content'] = mb_eregi_replace('@(\w+)\s*=\s*[\'"](.*?)[\'"]', '', $content);
-        $result['content'] = mb_eregi_replace('@(\w+)\s*=\s*([^\n^\'^""]+)', '', $result['content']);
+        $result['content'] = mb_eregi_replace('[^@]@(\w+)\s*=\s*[\'"].*?[\'"]', '', $content);
+        $result['content'] = mb_eregi_replace('^@(\w+)\s*=\s*[\'"].*?[\'"]', '', $result['content']);
+        $result['content'] = mb_eregi_replace('[^@]@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);
+        $result['content'] = mb_eregi_replace('^@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);
+        
         $result['content'] = str_replace("\n\n\n", '', $result['content']);
-        $result['content'] = str_replace("\n\n", '', $result['content']);
+        //$result['content'] = str_replace("\n\n", '', $result['content']);
         
         if($bl2br)
-            $result['content'] = str_replace("\n", '<br/>', $result['content']);
+            $result['content'] = str_replace("\n\n", '<br/>', $result['content']);
         
         //Links to posts
         $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
@@ -54,6 +64,9 @@ class parser {
         
         //Scripts
         $result['content'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $result['content']);
+        
+        //@@@@@@@@@@@@@@@@@@@@@@@
+        $result['content'] = preg_replace('#@@#is', '@', $result['content']);
             
         return $result;
     }
