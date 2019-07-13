@@ -21,7 +21,7 @@ class users extends baseTable {
             FROM $this->table U
             WHERE U.username = %s
 SQL;
-        return \DB::queryFirstField($sql, $name);
+        return $this->queryFirstField($sql, $name);
     }    
     
     public function get($id) {
@@ -31,7 +31,7 @@ SQL;
             WHERE U.$this->pk=%i
             ORDER by posts DESC
 SQL;
-        return \DB::queryFirstRow($sql, $id);
+        return $this->queryFirstRow($sql, $id);
     }
     
     public function getByName($name) {
@@ -41,7 +41,7 @@ SQL;
             WHERE U.username = %s
             ORDER by posts DESC
 SQL;
-        return \DB::queryFirstRow($sql, trim($name));
+        return $this->queryFirstRow($sql, trim($name));
     } 
     
     public function selectAll($lang_id = 0) {

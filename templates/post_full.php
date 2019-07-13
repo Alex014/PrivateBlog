@@ -7,7 +7,7 @@
               <a href="/post.php?name=<?=$post['name']?>" style="position: absolute; right: 32px; top: 10px;">[Show simple]</a>
             </div>
             <div class="panel-body">
-                <?=nl2br(trim($post['content']))?>
+                <?=$post['content']?>
             </div>
         </div>
     </div>

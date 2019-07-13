@@ -6,6 +6,9 @@
             </div>
             <div class="panel-body">
                 Total <?=\darkblog\db\pager::$total?> bloggers
+                <? if(empty($users)): ?>
+                    <div> No data you must <a href="#" class="__sync">SYNC</a> data  with blockchain </div>
+                <? endif; ?>
             </div>
             <table class="table">
                 <thead>

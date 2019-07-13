@@ -1,18 +1,18 @@
 <?php
 $application = 'darkblog';
-require_once '../conf/conf.php';
+require_once __DIR__.'/../conf/conf.php';
 
-require_once '../autoloader.php';
+require_once __DIR__.'/../autoloader.php';
 
 $autoloader = new libAutoloader();
 
-require_once '../conf/db.php';
-require_once '../conf/emercoin.conf.php';
-require_once '../conf/other.php';
+require_once __DIR__.'/../conf/db.php';
+require_once __DIR__.'/../conf/emercoin.conf.php';
+require_once __DIR__.'/../conf/other.php';
 
 $page = 'new_post';
 
-require 'templates/header.php';
+require __DIR__.'/templates/header.php';
 
 \darkblog\other\url::parse();
 
@@ -50,8 +50,8 @@ if(!empty($_POST['content']) && !empty($_POST['name'])) {
         $error = $exc->getMessage();
         $description = $exc->getTraceAsString();
         
-        require 'templates/error.php';
-        require 'templates/footer.php';
+        require __DIR__.'/templates/error.php';
+        require __DIR__.'/templates/footer.php';
         
         die();
     }
@@ -61,8 +61,8 @@ if(!empty($_POST['content']) && !empty($_POST['name'])) {
     $link = '/me/posts.php';
     $link_name = 'Posts list';
         
-    require 'templates/success.php';
-    require 'templates/footer.php';
+    require __DIR__.'/templates/success.php';
+    require __DIR__.'/templates/footer.php';
 
     die();
 }
@@ -74,6 +74,6 @@ else {
     $__reply = '';
 }
 
-require 'templates/posts_new.php';
+require __DIR__.'/templates/posts_new.php';
 
-require 'templates/footer.php';
+require __DIR__.'/templates/footer.php';

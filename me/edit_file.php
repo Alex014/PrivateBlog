@@ -1,14 +1,14 @@
 <?php
 $application = 'darkblog';
-require_once '../conf/conf.php';
+require_once __DIR__.'/../conf/conf.php';
 
-require_once '../autoloader.php';
+require_once __DIR__.'/../autoloader.php';
 
 $autoloader = new libAutoloader();
 
-require_once '../conf/db.php';
-require_once '../conf/emercoin.conf.php';
-require_once '../conf/other.php';
+require_once __DIR__.'/../conf/db.php';
+require_once __DIR__.'/../conf/emercoin.conf.php';
+require_once __DIR__.'/../conf/other.php';
 
 $page = 'new_file';
 
@@ -20,7 +20,7 @@ else {
     $filename = $_REQUEST['name'];
 }
 
-require 'templates/header.php';
+require __DIR__.'/templates/header.php';
 
 \darkblog\other\url::parse();
 
@@ -37,8 +37,8 @@ if(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'edit')) {
         $error = $exc->getMessage();
         $description = $exc->getTraceAsString();
         
-        require 'templates/error.php';
-        require 'templates/footer.php';
+        require __DIR__.'/templates/error.php';
+        require __DIR__.'/templates/footer.php';
         
         die();
     }
@@ -48,8 +48,8 @@ if(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'edit')) {
     $link = '/me/files.php';
     $link_name = 'Files list';
         
-    require 'templates/success.php';
-    require 'templates/footer.php';
+    require __DIR__.'/templates/success.php';
+    require __DIR__.'/templates/footer.php';
 
     die();
 }
@@ -62,8 +62,8 @@ elseif(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'delete')) {
         $error = $exc->getMessage();
         $description = $exc->getTraceAsString();
         
-        require 'templates/error.php';
-        require 'templates/footer.php';
+        require __DIR__.'/templates/error.php';
+        require __DIR__.'/templates/footer.php';
         
         die();
     }
@@ -73,8 +73,8 @@ elseif(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'delete')) {
     $link = '/me/files.php';
     $link_name = 'Files list';
         
-    require 'templates/success.php';
-    require 'templates/footer.php';
+    require __DIR__.'/templates/success.php';
+    require __DIR__.'/templates/footer.php';
 
     die();
 }
@@ -83,6 +83,6 @@ else {
     $file = $oFiles->getFileData($filename);
 }
 
-require 'templates/files_edit.php';
+require __DIR__.'/templates/files_edit.php';
 //var_dump($blogger);
-require 'templates/footer.php';
+require __DIR__.'/templates/footer.php';

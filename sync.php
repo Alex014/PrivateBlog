@@ -1,6 +1,9 @@
 <?php
 $application = 'darkblog';
 
+//define('PHAR', false);
+//define('SQLITE', true);
+
 error_reporting(E_ALL - E_NOTICE - E_DEPRECATED - E_WARNING);
 ini_set('display_errors', 1);
 
@@ -11,6 +14,7 @@ require_once 'autoloader.php';
 
 $autoloader = new libAutoloader();
 
+require_once 'conf/conf.php';
 require_once 'conf/db.php';
 require_once 'conf/emercoin.conf.php';
 

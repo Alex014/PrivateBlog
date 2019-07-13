@@ -14,7 +14,7 @@ class parser {
      * Parse text content into array with values
      * @param type $content
      */
-    public static function parse($content, $bl2br = true) {
+    public static function parse($content, $bl2br = false) {
         $matches = array();
         //preg_match_all('/@(\w+).*?=.*?[\'"](.*?)[\'"]/imsr', $content, $matches, PREG_SET_ORDER);
         //mb_eregi('@(\w+).*?=.*?[\'"](.*?)[\'"]', $content, $matches);
@@ -47,10 +47,13 @@ class parser {
         $result['content'] = mb_eregi_replace('^@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);
         
         $result['content'] = str_replace("\n\n\n", '', $result['content']);
-        //$result['content'] = str_replace("\n\n", '', $result['content']);
+        $result['content'] = str_replace("\n\n", '', $result['content']);
         
-        if($bl2br)
-            $result['content'] = str_replace("\n\n", '<br/>', $result['content']);
+        //if($bl2br)
+        //    $result['content'] = str_replace("\n\n", '<br/>', $result['content']);*/
+        
+        //$p = new \darkblog\lib\Parsedown();
+        //$result['content'] = $p->parse($result['content']);
         
         //Links to posts
         $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');

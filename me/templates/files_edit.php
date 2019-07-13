@@ -1,8 +1,13 @@
-<form method="post" id="form" style="padding-top: 60px;">
+<div class='row'>
+<div class='col-md-12'>
+    
+<div class='panel panel-default' style="margin-top: 60px;">
+    <div class='panel-body'>
+<form method="post" id="form">
 
   <div class="form-group">
-      <label for="days">Days <small>(if the record will expire, you won't be able to edit or delete it)</small></label>
-      <input class="form-control" name="days" id="days"  validate="required|number" value="<?=$file['days']?>">
+      <label for="days">Days  <small><?=$file['days']?> + days</small></label>
+      <input class="form-control" name="days" id="days"  validate="required|number" value="1">
   </div>
 
   <div class="form-group">
@@ -18,6 +23,11 @@
     <input class="form-control" name="action" id='action' value="edit" type="hidden">
     
 </form>
+    </div>
+</div>
+
+</div>
+</div>
 
 
 <?if($file['expired']):?>

@@ -5,6 +5,19 @@ This is a blog aggregator. All posts are stored in emercoin blockchain. The post
 
 The blockchain values from NVS gets parsed by this aggregator using @key="value" params inside the NVS value.
 
+## SQLite and PHAR
+`php -S localhost:8000 build/pblog.phar` and in browser `http://127.0.0.1:8000/post.php?name=about_private_blog`
+configure in **connection.json** located in working directory 
+
+### Build
+Build Phar using `php compile.php`
+And configure `conf/conf.php` and set
+```
+define('PHAR', true);
+define('SQLITE', true);
+```
+before compiling
+
 ## Do bloging through web interface
 Finally added ability to make records not through Emercoin wallet, but through Private Blog WEB interface
 

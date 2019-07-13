@@ -6,8 +6,51 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <title>Private Blog</title>
-        
+        <?if(PHAR):?>
+        <style>
+        <?php
+        echo file_get_contents(__DIR__.'/../css/bootstrap.min.css');
+        ?>
+        </style>
+        <style>
+        <?php
+        echo file_get_contents(__DIR__.'/../css/bootstrap-cyborg.min.css');
+        ?>
+        </style>
+        <?else:?>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/bootstrap-cyborg.min.css">
+        <?endif;?>
+        
+        <style>
+            body {
+                background: url('/img/bblack.jpg'); 
+                /* background: url('/img/bblue.jpg'); */
+                /* background: url('/img/bgreen.png'); */
+                background-attachment: fixed;
+            }
+            
+            *, h1,h2,h3, p, td,th {
+                color: #ccc;
+            }
+            
+            p {
+                color: #ccc !important;
+            }
+            
+            a, table a:not(.btn), .table a:not(.btn) {
+                color: lightgreen;
+            }
+            
+            a:hover,a:focus {
+                color: limegreen;
+            }
+            
+            code, pre {
+                color: yellow;
+                background: black;
+            }
+        </style>
     </head>
 <body>
     
@@ -29,7 +72,7 @@
             <?endif;?>
             <li role="presentation" <?if($page == 'config'):?>class="active"<?endif;?>><a href="/config.php">Config</a></li>
             <li role="presentation" <?if($page == 'howto'):?>class="active"<?endif;?>><a href="/howto.php">HowTo</a></li>
-            <li role="presentation"><a href=# id="sync">SYNC</a></li>
+            <li role="presentation"><a href=#  class="__sync">SYNC</a></li>
             <li role="presentation" <?if($page == 'about'):?>class="active"<?endif;?>><a href="/about.php">About</a></li>
           </ul>
         </div><!--/.nav-collapse -->

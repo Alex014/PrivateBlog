@@ -9,7 +9,7 @@
               <? endif; ?>
             </div>
             <div class="panel-body">
-                <?=nl2br(trim($post['content']))?>
+                <?=$post['content']?>
             </div>
         </div>
     </div>

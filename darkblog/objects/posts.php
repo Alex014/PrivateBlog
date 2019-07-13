@@ -259,8 +259,7 @@ class posts {
                     'metadata' => serialize($_post)
                 );
             }
-        }
-        
+        }      
         //Inserting primary posts
         $this->insertPosts($insert_posts);
         
@@ -291,7 +290,8 @@ class posts {
                 $user = $ousers->getByName($post['username']);
                 if(!empty($user)) {
                     $user_id = $user['id'];
-                    //var_dump($user['key'], $post['username'], $post['sig'], $post['name']);
+                    //var_dump($user['id'], $user['key'], $post['username'], $post['sig'], $post['name']);
+                    //var_dump($this->blockchanVerifyPost($user['key'], $post['username'], $post['sig'], $post['name']));
                     if($this->blockchanVerifyPost($user['key'], $post['username'], $post['sig'], $post['name']))
                         $oposts->updateUser($post['id'], $user_id);
                 }

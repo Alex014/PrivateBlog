@@ -6,7 +6,11 @@
             </div>
             <div class="panel-body">
                 <center>
-                    <img src='/img/neoguns.png'/>
+        <?if(PHAR):?>
+        <img alt="Neo guns" src="data:image/png;base64,<?= base64_encode(file_get_contents(__DIR__.'/../img/neoguns.png'))?>"/>
+        <?else:?>
+                    <img alt="Neo guns" src='/img/neoguns.png'/>
+        <?endif;?>
                 </center>
                 <br>
                     <p>

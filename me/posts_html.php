@@ -1,14 +1,14 @@
 <?php
 $application = 'darkblog';
-require_once '../conf/conf.php';
+require_once __DIR__.'/../conf/conf.php';
 
-require_once '../autoloader.php';
+require_once __DIR__.'/../autoloader.php';
 
 $autoloader = new libAutoloader();
 
-require_once '../conf/db.php';
-require_once '../conf/emercoin.conf.php';
-require_once '../conf/other.php';
+require_once __DIR__.'/../conf/db.php';
+require_once __DIR__.'/../conf/emercoin.conf.php';
+require_once __DIR__.'/../conf/other.php';
 
 
 
@@ -109,4 +109,4 @@ usort($posts, function ($post1, $post2) use($sort) {
 });
 
 //var_dump($posts);
-require 'templates/posts.php';
+require __DIR__.'/templates/posts.php';

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#sync').click(function() {
+    $('.__sync').click(function() {
         var self = this;
         $(self).text('Working ...');
         $.get('/sync.php', function(result) {

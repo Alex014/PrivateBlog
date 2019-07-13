@@ -42,7 +42,7 @@ class posts extends baseTable {
             LEFT JOIN $this->table_users U ON (P.user_id = U.id)
             WHERE P.$this->pk=%i
 SQL;
-        return \DB::queryFirstRow($sql, $id);
+        return $this->queryFirstRow($sql, $id);
     }
     
     public function getByName($name) {
@@ -52,7 +52,7 @@ SQL;
             LEFT JOIN $this->table_users U ON (P.user_id = U.id)
             WHERE P.name=%s
 SQL;
-        return \DB::queryFirstRow($sql, trim($name));
+        return $this->queryFirstRow($sql, trim($name));
     }
     
     public function getIdByName($name) {
@@ -61,7 +61,7 @@ SQL;
             FROM $this->table P
             WHERE P.name = %s
 SQL;
-        return \DB::queryFirstField($sql, $name);
+        return $this->queryFirstField($sql, $name);
     }    
     
     public function getByKeyword($keyword_id, $lang_id = 0) {
@@ -96,7 +96,7 @@ SQL;
         if($paged)
             return pager::pagedQuery($sql);
         else
-            return \DB::query ($sql);
+            return $this->query ($sql);
     }
     
     public function selectByUser($user_id, $lang_id = 0) {

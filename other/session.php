@@ -4,90 +4,138 @@ define('PS_UNDEF_MARKER', '!');
 
 class session {
 	
-	var $Sql;
-	var $Table;
-	
-	function session($sql_driver, $sess_table) {		
-	  $this->Sql = $sql_driver;	
-	  $this->Table = $sess_table;
+    var $Sql;
+    var $Table;
 
-    $this->gc();
+    function session($sql_driver, $sess_table) {
+        $this->Sql = $sql_driver;	
+        $this->Table = $sess_table;
 
-		session_set_save_handler(	array(&$this, "open"),
-															array(&$this, "close"),
-															array(&$this, "read"),
-															array(&$this, "write"),
-															array(&$this, "destroy"),
-															array(&$this, "gc"));		
-		session_start();
-	}
+        $this->gc();
 
-  function read_session_key($id) {
-    $r = $this->read($id);
-    $_SESSION = $this->session_real_decode($r);
-  }
+        session_set_save_handler(   array(&$this, "open"),
+                                    array(&$this, "close"),
+                                    array(&$this, "read"),
+                                    array(&$this, "write"),
+                                    array(&$this, "destroy"),
+                                    array(&$this, "gc"));		
+        session_start();
+    }
+
+    function read_session_key($id) {
+        $r = $this->read($id);
+        $_SESSION = $this->session_real_decode($r);
+    }
 
 	
-	function open($save_path, $session_name) {
-	  return(true);
-	}
+    function open($save_path, $session_name) {
+        return(true);
+    }
 	
-	function close() {
-	  return(true);
-	}
+    function close() {
+        return(true);
+    }
 	
-	function read($id) {
-		$usr_ip = $_SERVER['REMOTE_ADDR'];//echo "SELECT `data` FROM $this->Table WHERE skey = '$id'";
-		$st = $this->Sql->prepare("SELECT `data` FROM $this->Table WHERE skey = :skey");
-		$st->execute(array('skey' => $id));
-		$row = $st->fetch();
-	  $st->closeCursor();
-	  return $row[0];
-	}
+    function read($id) {
+        $usr_ip = $_SERVER['REMOTE_ADDR'];//echo "SELECT `data` FROM $this->Table WHERE skey = '$id'";
+        
+        if(SQLITE) {
+            return $this->Sql->querySingle("SELECT `data` FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+        }
+        else {
+            $st = $this->Sql->prepare("SELECT `data` FROM $this->Table WHERE skey = :skey");
+            $st->execute(array('skey' => $id));
+            $row = $st->fetch();
+            $st->closeCursor();
+            return $row[0];
+        }
+    }
 	
-	function write($id, $sess_data) {
-	  //global $Sql, $TABLES;
-		$user_ip = $_SERVER['REMOTE_ADDR'];
-	  $sess_data = $sess_data;
-		$st = $this->Sql->prepare("SELECT COUNT(skey) FROM $this->Table WHERE skey = :skey");
-		$st->execute(array('skey' => $id));
-		$row = $st->fetch();
-	  $st->closeCursor();
-	  $rc = $row[0];
-	  //print "writing session(".get_magic_quotes_gpc().") ... ";
-	  if($rc == 0) {
-	  	$st = $this->Sql->prepare("INSERT INTO $this->Table
-	  			(user_ip, skey, data, _edited)
-	  			VALUES
-	  			(:user_ip, :skey, :data, :_edited)"); 
-      $st->execute(array('user_ip' => $user_ip, 'skey' => $id, 'data' => $sess_data, '_edited' => time()));
-      $st->closeCursor();
-	  }
-	  else {
-			$st = $this->Sql->prepare("UPDATE $this->Table SET
-					user_ip = :user_ip,
-					data = :data,
-					_edited = :_edited WHERE skey = :skey");
-      $st->execute(array('user_ip' => $user_ip, 'skey' => $id, 'data' => $sess_data, '_edited' => time()));
-      $st->closeCursor();
-	  }
-	  //print "OK";
-          return true;
-	}
+    function write($id, $sess_data) {
+        //global $Sql, $TABLES;
+        $user_ip = $_SERVER['REMOTE_ADDR'];
+        $sess_data = $sess_data;
+        
+        if(SQLITE) {
+            $rc = $this->Sql->querySingle("SELECT COUNT(skey) FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+        }
+        else {
+            $st = $this->Sql->prepare("SELECT COUNT(skey) FROM $this->Table WHERE skey = :skey");
+            $st->execute(array('skey' => $id));
+            $row = $st->fetch();
+            $st->closeCursor();
+            $rc = $row[0];
+        }
+        //print "writing session(".get_magic_quotes_gpc().") ... ";
+        if($rc == 0) {
+            if(SQLITE) {
+                $user_ip = $this->Sql->escapeString($user_ip);
+                $id = $this->Sql->escapeString($id);
+                $sess_data = $this->Sql->escapeString($sess_data);
+                $_edited = $this->Sql->escapeString(time());
+                $sql = "INSERT INTO $this->Table "
+                        . "(user_ip, skey, data, _edited) "
+                        . "VALUES "
+                        . "('$user_ip', '$id', '$sess_data', '$_edited')";
+                $this->Sql->exec($sql);
+            }
+            else {
+                $st = $this->Sql->prepare("INSERT INTO $this->Table
+                                (user_ip, skey, data, _edited)
+                                VALUES
+                                (:user_ip, :skey, :data, :_edited)"); 
+                $st->execute(array('user_ip' => $user_ip, 'skey' => $id, 'data' => $sess_data, '_edited' => time()));
+                $st->closeCursor();
+            }
+        }
+        else {
+            if(SQLITE) {
+                $user_ip = $this->Sql->escapeString($user_ip);
+                $id = $this->Sql->escapeString($id);
+                $sess_data = $this->Sql->escapeString($sess_data);
+                $_edited = $this->Sql->escapeString(time());
+                $sql = "UPDATE $this->Table SET "
+                        . "user_ip = '$user_ip', "
+                        . "data = '$sess_data', "
+                        . "_edited = '$_edited' WHERE skey = '$id' ";
+                $this->Sql->exec($sql);
+            }
+            else {
+                $st = $this->Sql->prepare("UPDATE $this->Table SET
+                                user_ip = :user_ip,
+                                data = :data,
+                                _edited = :_edited WHERE skey = :skey");
+                $st->execute(array('user_ip' => $user_ip, 'skey' => $id, 'data' => $sess_data, '_edited' => time()));
+                $st->closeCursor();
+            }
+        }
+        //print "OK";
+        return true;
+    }
 	
-	function destroy($id) {
-		$usr_ip = $_SERVER['REMOTE_ADDR'];
-	  return $this->Sql->exec("DELETE FROM $this->Table
-															WHERE skey = '$id'");
-	}
+    function destroy($id) {
+        $usr_ip = $_SERVER['REMOTE_ADDR'];
+        if(SQLITE) {
+            return $this->Sql->exec("DELETE FROM $this->Table WHERE skey = '".$this->Sql->escapeString($id)."'");
+        } else {
+            return $this->Sql->exec("DELETE FROM $this->Table WHERE skey = '$id'");
+        }
+    }
 	
-	function gc($maxlifetime = 7200) {
-		$usr_ip = $_SERVER['REMOTE_ADDR'];
-		$this->Sql->exec("DELETE FROM $this->Table	WHERE
-((UNIX_TIMESTAMP()-_edited) > $maxlifetime) OR
-(   ((UNIX_TIMESTAMP()-_edited) > 10)   AND  ( (`data` = '') OR ( `data` IS NULL) )   )");
-	  return true;
-	}
+    function gc($maxlifetime = 7200) {
+        $usr_ip = $_SERVER['REMOTE_ADDR'];
+        if(SQLITE) {
+            $this->Sql->exec("DELETE FROM $this->Table WHERE
+                ((strftime('%s', 'now')-_edited) > $maxlifetime) OR
+                (   ((strftime('%s', 'now')-_edited) > 10)   AND  ( (`data` = '') OR ( `data` IS NULL) )   )");
+        }
+        else {
+            $this->Sql->exec("DELETE FROM $this->Table WHERE
+                ((UNIX_TIMESTAMP()-_edited) > $maxlifetime) OR
+                (   ((UNIX_TIMESTAMP()-_edited) > 10)   AND  ( (`data` = '') OR ( `data` IS NULL) )   )");
+        }
+        return true;
+    }
 
 
   /**

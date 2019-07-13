@@ -1,8 +1,14 @@
-<form method="post" id="form" style="padding-top: 60px;">
+<div class='row'>
+<div class='col-md-12'>
+    
+<div class='panel panel-default' style="margin-top: 60px;">
+    <div class='panel-body'>
+
+        <form method="post" id="form">
 
   <div class="form-group">
-      <label for="days">Days</label>
-      <input class="form-control" name="days" id="days" validate="required|number" value="<?=$post['days']?>">
+      <label for="days">Days <small><?=$post['days']?> + days</small></label>
+      <input class="form-control" name="days" id="days" validate="required|number" value="1">
   </div>
 
   <div class="form-group">
@@ -42,9 +48,14 @@
     <input class="form-control" name="reply" id="reply" value="<?=$post['reply']?>">
   </div>
     
-  <div class="form-group">
-    <label for="content">Post content  <a href="#" type="submit" class="btn btn-info" id="editor" data-enabled="0">EDITOR</a> </label>
-    <textarea class="form-control summernote" name="content" id="content" style="width: 100%; height: 400px;" validate="required"><?=$post['content']?></textarea>
+  <div class="form-group" style='background: white;'>
+      <style>
+          span {
+              color: black;
+          }
+      </style>
+    <label for="content" style='color: black;'>Post content  <a href="#" type="submit" class="btn btn-info" id="editor" data-enabled="0">EDITOR</a> </label>
+    <textarea class="form-control editor" name="content" id="content" style="width: 100%; height: 400px;" validate="required"><?=$post['content']?></textarea>
   </div>
 
     <input class="form-control" name="action" id="action" value="edit" type="hidden">
@@ -55,6 +66,11 @@
   <br/>
         
 </form>
+    </div>
+</div>
+
+</div>
+</div>
 
 <?if($post['expired']):?>
 <div class="alert alert-danger alert-dismissible" role="alert">
@@ -73,9 +89,24 @@
   <br/>
 <?endif;?>
 
+        <?if(PHAR):?>
+        <style>
+        <?php
+        echo file_get_contents(__DIR__.'/../../css/simplemde.min.css');
+        ?>
+        </style>
+        <script type='text/javascript'>
+        <?php
+        echo file_get_contents(__DIR__.'/../../js/simplemde.min.js');
+        ?>
+        </script>
+        <?else:?>
+        
 <!-- include summernote css/js -->
-<link href="/css/summernote.css" rel="stylesheet">
-<script src="/js/summernote.min.js"></script>
+<link href="/css/simplemde.min.css" rel="stylesheet">
+<script src="/js/simplemde.min.js"></script>
+        
+        <?endif;?>
 
 
 <script type="text/javascript">
@@ -152,11 +183,13 @@ $(document).ready(function() {
 
 $(document).on('click', '#editor', function() {
     if($(this).data('enabled') == '1') {
-        $('.summernote').summernote('destroy');
+        //$('.editor').summernote('destroy');
+        simplemde.toTextArea();
+        simplemde = null;
         $(this).data('enabled', '0')
     }
     else {
-        $('.summernote').summernote({height: 200,  toolbar: [
+        /*$('.editor').summernote({height: 200,  toolbar: [
             // [groupName, [list of button]]
             ['style', ['style', 'bold', 'italic', 'underline']],
             ['misc', ['undo','redo']],
@@ -164,8 +197,9 @@ $(document).on('click', '#editor', function() {
             ['para', ['ul', 'ol', 'paragraph']],
             ['other', ['link', 'hr','table','picture']],
             ['screen', ['codeview', 'fullscreen']]
-          ]});
+          ]});*/
         
+        simplemde = new SimpleMDE({ element: $(".editor")[0] });
         $(this).data('enabled', '1')
     }
     

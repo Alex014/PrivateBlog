@@ -1,4 +1,10 @@
-<form method="post" id="form" style="padding-top: 60px;">
+<div class='row'>
+<div class='col-md-12'>
+    
+<div class='panel panel-default' style="margin-top: 60px;">
+    <div class='panel-body'>
+
+<form method="post" id="form">
 
   <div class="form-group">
       <label for="days">Days <small>(if the record will expire, you won't be able to edit or delete it)</small></label>
@@ -37,8 +43,13 @@
     <input class="form-control" name="reply" id="reply" value="<?=$__reply?>">
   </div>
     
-  <div class="form-group">
-    <label for="content">Post content  <a href="#" type="submit" class="btn btn-info" id="editor" data-enabled="1">EDITOR</a> </label>
+  <div class="form-group" style='background: white;'>
+      <style>
+          span {
+              color: black;
+          }
+      </style>
+    <label for="content" style='color: black;'>Post content  <a href="#" type="submit" class="btn btn-info" id="editor" data-enabled="1">EDITOR</a> </label>
     <textarea class="form-control summernote" name="content" id="content" style="width: 100%; height: 400px;" validate="required"></textarea>
   </div>
 
@@ -49,11 +60,30 @@
   <br/>
   <br/>
 </form>
+        
+    </div>
+</div>
 
+</div>
+</div>
+        <?if(PHAR):?>
+        <style>
+        <?php
+        echo file_get_contents(__DIR__.'/../../css/simplemde.min.css');
+        ?>
+        </style>
+        <script type='text/javascript'>
+        <?php
+        echo file_get_contents(__DIR__.'/../../js/simplemde.min.js');
+        ?>
+        </script>
+        <?else:?>
+        
 <!-- include summernote css/js -->
-<link href="/css/summernote.css" rel="stylesheet">
-<script src="/js/summernote.min.js"></script>
-
+<link href="/css/simplemde.min.css" rel="stylesheet">
+<script src="/js/simplemde.min.js"></script>
+        
+        <?endif;?>
 
 <script type="text/javascript">
 $.getJSON("/me/bloggers.php", {action: 'bloggers'}, function(data) {
@@ -94,8 +124,8 @@ $(document).on('change', '#name', function() {
     $('#bloggers').trigger('change');
 })
 
-function summernote() {
-    $('.summernote').summernote({height: 200,  toolbar: [
+function editor() {
+    /*$('.editor').summernote({height: 200,  toolbar: [
         // [groupName, [list of button]]
         ['style', ['style', 'bold', 'italic', 'underline']],
         ['misc', ['undo','redo']],
@@ -103,22 +133,25 @@ function summernote() {
         ['para', ['ul', 'ol', 'paragraph']],
         ['other', ['link', 'hr','table','picture']],
         ['screen', ['codeview', 'fullscreen']]
-      ]});
+      ]});*/
+    simplemde = new SimpleMDE({ element: $(".editor")[0] });
 }
 
 $(document).ready(function() {
-    summernote()
+    editor()
     $('#form').bt_validate();
 })
 
 
 $(document).on('click', '#editor', function() {
     if($(this).data('enabled') == '1') {
-        $('.summernote').summernote('destroy');
+        //$('.editor').summernote('destroy');
+        simplemde.toTextArea();
+        simplemde = null;
         $(this).data('enabled', '0')
     }
     else {
-        summernote()
+        editor()
         $(this).data('enabled', '1')
     }
     

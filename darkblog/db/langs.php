@@ -21,7 +21,7 @@ class langs extends baseTable {
             FROM $this->table L
             WHERE L.name = %s
 SQL;
-        return \DB::queryFirstField($sql, $name);
+        return $this->queryFirstField($sql, $name);
     }    
     
     public function get($id) {
@@ -31,7 +31,7 @@ SQL;
             LEFT JOIN $this->table_posts P ON (P.lang_id = L.id)
             WHERE L.$this->pk=%i
 SQL;
-        return \DB::queryFirstRow($sql, $id);
+        return $this->queryFirstRow($sql, $id);
     }
     
     public function selectAll() {
@@ -42,7 +42,7 @@ SQL;
             GROUP BY L.$this->pk) TBL
             ORDER BY name
 SQL;
-        return \DB::query($sql);
+        return $this->query($sql);
     }
     
     public function selectOrderByName() {
@@ -57,6 +57,6 @@ SQL;
             GROUP BY L.$this->pk) TBL
             ORDER BY posts
 SQL;
-        return \DB::query($sql);
+        return $this->query($sql);
     }
 }

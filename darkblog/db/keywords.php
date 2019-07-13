@@ -21,7 +21,7 @@ class keywords extends baseTable {
             FROM $this->table K
             WHERE K.word = %s
 SQL;
-        return \DB::queryFirstField($sql, $keyword);
+        return $this->queryFirstField($sql, $keyword);
     }    
     
     public function getByKeyword($keyword_id, $lang_id = 0) {
@@ -41,7 +41,7 @@ SQL;
             GROUP BY K.$this->pk) TBL
             ORDER BY posts DESC, word
 SQL;
-        return \DB::query($sql, $keyword_id);
+        return $this->query($sql, $keyword_id);
     } 
     
     public function get($name) {
@@ -50,7 +50,7 @@ SQL;
             FROM $this->table K
             WHERE K.word = %s
 SQL;
-        return \DB::queryFirstRow($sql, trim($name));
+        return $this->queryFirstRow($sql, trim($name));
     }
     
     public function selectAll($lang_id = 0) {
@@ -69,7 +69,7 @@ SQL;
             GROUP BY K.$this->pk) TBL
             ORDER BY posts DESC, word
 SQL;
-        return \DB::query($sql);
+        return $this->query($sql);
     }
     
     public function selectByUser($user_id, $lang_id = 0) {
@@ -88,7 +88,7 @@ SQL;
             GROUP BY K.$this->pk) TBL
             ORDER BY posts DESC, word
 SQL;
-        return \DB::query($sql, $user_id);
+        return $this->query($sql, $user_id);
     }
     
     public function selectByPost($post_id, $lang_id = 0) {
@@ -104,7 +104,7 @@ SQL;
             GROUP BY K.$this->pk) TBL
             ORDER BY posts DESC, word
 SQL;
-        return \DB::query($sql, $post_id);
+        return $this->query($sql, $post_id);
     }
     
     public function selectByPosts($posts, $lang_id = 0) {
@@ -121,6 +121,6 @@ SQL;
             WHERE PK.post_id IN ($posts)
             ORDER BY K.word
 SQL;
-        return \DB::query($sql);
+        return $this->query($sql);
     }
 }

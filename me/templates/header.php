@@ -7,23 +7,75 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <title>Private Blog</title>
         
+        <?if(PHAR):?>
+        <style>
+        <?php
+        echo file_get_contents(__DIR__.'/../../css/bootstrap.min.css');
+        ?>
+        </style>
+        <style>
+        <?php
+        echo file_get_contents(__DIR__.'/../../css/bootstrap-cyborg.min.css');
+        ?>
+        </style>
+        
+        <script type='text/javascript'>
+        <?php
+        echo file_get_contents(__DIR__.'/../../js/jquery.min.js');
+        ?>
+        </script>
+        <script type='text/javascript'>
+        <?php
+        echo file_get_contents(__DIR__.'/../../js/ie10-viewport-bug-workaround.js');
+        ?>
+        </script>
+        <script type='text/javascript'>
+        <?php
+        echo file_get_contents(__DIR__.'/../../js/me.js');
+        ?>
+        </script>
+
+        <?else:?>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/bootstrap-cyborg.min.css">
         
-        
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
         <script src="/js/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="/js/ie10-viewport-bug-workaround.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        
-
-    <script src="/js/bootstrap.validate.js"></script>
-    <script src="/js/bootstrap.validate.en.js"></script>
-
         <script src="/js/me.js"></script>
+        <?endif;?>
+        
+        <style>
+            body {
+                /*background: url('/img/bblack.jpg'); 
+                 background: url('/img/bblue.jpg'); */
+                 background: url('/img/bgreen.png');
+                background-attachment: fixed;
+            }
+            
+            *, h1,h2,h3, p, td,th {
+                color: #ccc;
+            }
+            
+            p {
+                color: #ccc !important;
+            }
+            
+            a, table a:not(.btn), .table a:not(.btn) {
+                color: lightgreen;
+            }
+            
+            a:hover,a:focus {
+                color: limegreen;
+            }
+            
+            code, pre {
+                color: yellow;
+                background: black;
+            }
+        </style>
+        
     </head>
 <body>
     

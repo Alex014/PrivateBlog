@@ -20,6 +20,17 @@ $page = 'post';
 \darkblog\db\pager::$order = 'name';
 if(!empty($_GET['page'])) \darkblog\db\pager::$page = (int)$_GET['page'];
 
+function parse_post(&$post) {
+    $p = new \darkblog\lib\Parsedown();
+    $post['content'] = $p->parse($post['content']);
+    $post['content'] = nl2br($post['content']);
+    
+    if(!empty($post['replies']))
+        foreach ($post['replies'] as $key => $subpost) {
+                $post['replies'][$key]['content'] = $p->parse($subpost['content']);
+            }
+}
+
 if(!empty($_GET['id'])) {
     $oposts = new \darkblog\objects\posts();
     
@@ -32,6 +43,8 @@ if(!empty($_GET['id'])) {
                 $post['reply_to'] = $oposts->getPost($post['reply_id']);
         }
         
+        parse_post($post);
+        
         require 'templates/header.php';
         require 'templates/post_full.php';
     }
@@ -43,6 +56,8 @@ if(!empty($_GET['id'])) {
             if(!empty($post['reply_id']))
                 $post['reply_to'] = $oposts->getPost($post['reply_id']);
         }
+        
+        parse_post($post);
         
         require 'templates/header.php';
         require 'templates/post.php';
@@ -61,6 +76,8 @@ elseif(!empty($_GET['name'])) {
                 $post['reply_to'] = $oposts->getPost($post['reply_id']);
         }
         
+        parse_post($post);
+        
         require 'templates/header.php';
         require 'templates/post_full.php';
     }
@@ -72,6 +89,8 @@ elseif(!empty($_GET['name'])) {
             if(!empty($post['reply_id']))
                 $post['reply_to'] = $oposts->getPost($post['reply_id']);
         }
+        
+        parse_post($post);
         
         require 'templates/header.php';
         require 'templates/post.php';

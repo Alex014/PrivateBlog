@@ -19,7 +19,7 @@ class pager {
     public static $order = 'id DESC';
     
     public static function calc_pages($total) {
-        self::$pages = array();
+        self::$pages = array();      
         self::$pages_count = ceil($total / self::$per_page);
         if(self::$pages_count == 0) self::$pages_count = 1;
 
@@ -47,13 +47,31 @@ class pager {
     }
     
     public static function query_count($sql) {
-        $sql = "SELECT COUNT(*) AS cnt FROM ( $sql ) TBL";
-        return \DB::queryFirstField($sql);
+        if(SQLITE) {
+            $sql = "SELECT COUNT(*) AS cnt FROM ( $sql ) TBL";
+            return \config::$db->querySingle($sql);
+        }
+        else {
+            $sql = "SELECT COUNT(*) AS cnt FROM ( $sql ) TBL";
+            return \DB::queryFirstField($sql);
+        }
     }
     
     public static function query_limit($sql) {
-        $sql = "SELECT * FROM ( $sql ) TBL ORDER BY ".self::$order." LIMIT ".self::$from.", ".self::$per_page;
-        return \DB::query($sql);
+        if(SQLITE) {
+            $sql = "SELECT * FROM ( $sql ) TBL ORDER BY ".self::$order." LIMIT ".self::$per_page;" OFFSET ".self::$from;
+            $q = \config::$db->query($sql);
+            $result = array();
+            while ($row = $q->fetchArray()) {
+                $result[] = $row;
+            }
+
+            return $result;
+        }
+        else {
+            $sql = "SELECT * FROM ( $sql ) TBL ORDER BY ".self::$order." LIMIT ".self::$from.", ".self::$per_page;
+            return \DB::query($sql);
+        }
     }
     
     public static function pagedQuery($sql) {
