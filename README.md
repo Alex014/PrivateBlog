@@ -7,7 +7,24 @@ The blockchain values from NVS gets parsed by this aggregator using @key="value"
 
 ## SQLite and PHAR
 `php -S localhost:8000 build/pblog.phar` and in browser `http://127.0.0.1:8000/post.php?name=about_private_blog`
-configure in **connection.json** located in working directory 
+
+configure
+```
+{   username: 'rpcuser',
+    password: 'rpcpassword',
+    address: '127.0.0.1',
+    port: '8332'}
+```
+ in **connection.json** located in working directory 
+
+configure RPC connection
+```
+rpcuser=rpcuser
+rpcpassword=rpcpassword
+rpcallowip=127.0.0.1
+rpcport=8332 
+```
+ in **emerdir/emercoin.conf:**
 
 ### Build
 Build Phar using `php compile.php`
