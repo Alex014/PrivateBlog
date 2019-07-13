@@ -110,7 +110,8 @@ Max level of subposts is 5
 
 ###### MeekroDB http://meekro.com/
 ###### Bootstrap http://getbootstrap.com/
-###### Summernote editor https://summernote.org
+###### Parsedown mardown parser https://parsedown.org/
+###### SimpleMDE Markdown editor https://simplemde.com/
 
 ## Donate
 
