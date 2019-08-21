@@ -1,6 +1,9 @@
 <?php
 //define('PHAR', true);
 //define('SQLITE', true);
+//        $uid = posix_getuid();
+//        $shell_user = posix_getpwuid($uid);
+//        echo $shell_user['dir']; 
 
 if(empty($_SERVER['REQUEST_URI']) || ($_SERVER['REQUEST_URI'] == '/')) {
     require_once __DIR__.'/bloggers.php';
