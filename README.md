@@ -6,7 +6,10 @@ This is a blog aggregator. All posts are stored in emercoin blockchain. The post
 The blockchain values from NVS gets parsed by this aggregator using @key="value" params inside the NVS value.
 
 ## Install
-`build\install\*` folder
+`bash build_and_install_linux.sh` to install to any linux
+`build_and_install_windows.bat` windows - not tested
+The bat files will build **pblog.phar** and copy it to apropriate locations
+
 To run manualy go to `build\install\other` and execute
 `php config.php -f="{EMERCOIN}/emercoin.conf"
 php -S localhost:8000 pblog.phar`
