@@ -1,0 +1,4 @@
+RUN
+php config.php -f="{EMERCOIN}/emercoin.conf"
+php -S localhost:8000 pblog.phar
+where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
