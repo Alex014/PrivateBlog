@@ -5,11 +5,11 @@ RED='\033[1;31m'
 NC='\033[0m' # No Color
 
 
-if ! test -f "build/pblog.phar"; then
+if test -f "build/pblog.phar"; then
     rm build/pblog.phar
 fi
 
-if ! test -f "build/install/other/pblog.phar"; then
+if test -f "build/install/other/pblog.phar"; then
     rm build/install/other/pblog.phar
 fi
 

@@ -1,18 +1,38 @@
 <?php
-$uid = posix_geteuid();
-$data = posix_getpwuid($uid);
-$userdir = $data['dir'];
+$files = glob('__require/windows-registry/*.php');
+foreach ($files as $file) {
+    require $file;
+}
 
-$Wshshell= new COM('WScript.Shell');
-$desktopFolder= $Wshshell->regRead('HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\Desktop');
+$hklm = \Windows\Registry\Registry::connect()->getCurrentUser();
+$keyPath = 'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders';
+$mySubKey = $hklm->getSubKey($keyPath);
+
+$userdir = $_SERVER['HOMEPATH'];
+$desktopFolder = $mySubKey->getValue('Desktop');
+
+$falsestr = 'system32\\config\\systemprofile';
+$strpos = strpos($desktopFolder, $falsestr);
+if($strpos !== false) {
+	$lenfalse = strlen($falsestr);
+	$desktopFolder = /*substr($desktopFolder, 0, 2) .*/ $userdir . substr($desktopFolder, $strpos + $lenfalse, strlen($desktopFolder) - $strpos - $lenfalse);
+}
+
 
 //mkdir %USERPROFILE%/pblog;
-mkdir("$userdir\pblog");
-//copy ../../pblog.phar %USERPROFILE%/pblog/pblog.phar;
-copy(__DIR__."\..\..\pblog.phar", "$userdir\pblog\pblog.phar");
-//copy ../config.php %USERPROFILE%/pblog/config.php;
-copy(__DIR__."\..\..\config.php", "$userdir\pblog\config.php");
-//copy run.bat.cpy %DESKTOP%/run-private-blog.bat;
-copy(__DIR__."\run.bat.cpy", "$desktopFolder\run-private-blog.bat");
+$dirname = "$userdir\\pblog";
+if(!file_exists($dirname)) mkdir($dirname);
 
-echo "Run private blog from '$desktopFolder\run-private-blog.bat' !";
+$dstfilename = "$userdir\\pblog\pblog.phar";
+if(file_exists($dstfilename)) unlink($dstfilename);
+copy(__DIR__."\\..\\..\\pblog.phar", $dstfilename);
+
+$dstfilename = "$userdir\\pblog\config.php";
+if(file_exists($dstfilename)) unlink($dstfilename);
+copy(__DIR__."\\..\\config.php", $dstfilename);
+
+$dstfilename = "$desktopFolder\\run-private-blog.bat";
+if(file_exists($dstfilename)) unlink($dstfilename);
+copy(__DIR__."\\run.bat.cpy", $dstfilename);
+
+echo "Run private blog from '$desktopFolder\\run-private-blog.bat' !";

@@ -9,10 +9,14 @@ $(document).ready(function() {
                     window.location.reload();
                 }
                 else {
-                    alert(result);
+                    text = 'Internal error (maybe blockchain is not synced) \n\n'
+                    text += result
+                    alert(text);
                 }
             }, 100)
 
+        }).fail(function() {
+            alert('Internal error (maybe blockchain is not synced)');
         })
     });
 })
