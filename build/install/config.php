@@ -25,7 +25,9 @@ if(!file_exists($filename)) {
     file_put_contents($filename, "rpcuser=rpcuser
 rpcpassword=rpcpassword
 rpcallowip=127.0.0.1
-rpcport=8332");
+rpcport=8332
+server=1
+listen=1");
     echo "File '$filename' created, restart Emercoin service !";
     die();
 }
