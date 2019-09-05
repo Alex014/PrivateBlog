@@ -12,7 +12,7 @@ YouTube chanel https://www.youtube.com/channel/UC_iKEMc1lkxeMus2yArktLQ !!!
 `bash build_and_install_linux.sh` to install to any linux
 And go to `/home/{your-username}/pblog` and run `./run.sh`
 ### Windows
-* Download PHP from `https://windows.php.net/download/` and unzip it to C:\php
+* Download PHP from `https://windows.php.net/download/` and unzip it to `C:\php`
 * Instal MS Visual Studio Redistributable (found here `https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads`)
 * Run `build_and_install_windows.bat` and then run `run-private-blog.bat` from your desktop (the `build_and_install_windows.bat` will also copy and overwrite `C:\php\php.ini` with a new one)
 ### Manual (or other OS)
