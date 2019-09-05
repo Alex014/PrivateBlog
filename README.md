@@ -21,7 +21,7 @@ Run `build_and_install_windows.bat` and then run `run-private-blog.bat` from you
 
 ## Run
 * Run browser with address `http://localhost:8000`
-* Make sure your Emercoin wallet is running and unblocked
+* Make sure your Emercoin wallet is running and unlocked
 
 ## Build
 Build Phar using `php compile.php`
