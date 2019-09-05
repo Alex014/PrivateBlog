@@ -5,15 +5,21 @@ This is a blog aggregator. All posts are stored in emercoin blockchain. The post
 
 The blockchain values from NVS gets parsed by this aggregator using @key="value" params inside the NVS value.
 
-## Install
-`bash build_and_install_linux.sh` to install to any linux
-`build_and_install_windows.bat` windows - not tested
-The bat files will build **pblog.phar** and copy it to apropriate locations
+YouTube chanel https://www.youtube.com/channel/UC_iKEMc1lkxeMus2yArktLQ !!!
 
-To run manualy go to `build\install\other` and execute
-`php config.php -f="{EMERCOIN}/emercoin.conf"
-php -S localhost:8000 pblog.phar`
-where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
+## Install
+###Linux
+`bash build_and_install_linux.sh` to install to any linux
+And go to `/home/{your-username}/pblog` and run `./run.sh`
+###Windows
+Run `build_and_install_windows.bat` and then run `run-private-blog.bat` from your desktop
+###Manual (or other OS)
+* Run `php compile.php` to build `pblog.phar` and copy it to `build` directory
+    Then go to `build\install\other` and execute
+    `php config.php -f="{EMERCOIN}/emercoin.conf" this will grab configuration from `emercoin.conf` to `config.json` file where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
+    Run `php -S localhost:8000 pblog.phar` to start a server
+    Run browser with address `http://localhost:8000`
+* Make sure your Emercoin wallet is running and unblocked
 
 ### Build
 Build Phar using `php compile.php`
