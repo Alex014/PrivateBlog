@@ -8,17 +8,17 @@ The blockchain values from NVS gets parsed by this aggregator using @key="value"
 YouTube chanel https://www.youtube.com/channel/UC_iKEMc1lkxeMus2yArktLQ !!!
 
 ## Install
-###Linux
+### Linux
 `bash build_and_install_linux.sh` to install to any linux
 And go to `/home/{your-username}/pblog` and run `./run.sh`
-###Windows
+### Windows
 Run `build_and_install_windows.bat` and then run `run-private-blog.bat` from your desktop
-###Manual (or other OS)
+### Manual (or other OS)
 * Run `php compile.php` to build `pblog.phar` and copy it to `build` directory
-    Then go to `build\install\other` and execute
-    `php config.php -f="{EMERCOIN}/emercoin.conf" this will grab configuration from `emercoin.conf` to `config.json` file where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
-    Run `php -S localhost:8000 pblog.phar` to start a server
-    Run browser with address `http://localhost:8000`
+* Then go to `build\install\other` and execute
+    `php config.php -f="{EMERCOIN}/emercoin.conf"` this will grab configuration from `emercoin.conf` to `config.json` file where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
+* Run `php -S localhost:8000 pblog.phar` to start a server
+* Run browser with address `http://localhost:8000`
 * Make sure your Emercoin wallet is running and unblocked
 
 ### Build
