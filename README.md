@@ -18,10 +18,12 @@ Run `build_and_install_windows.bat` and then run `run-private-blog.bat` from you
 * Then go to `build\install\other` and execute
     `php config.php -f="{EMERCOIN}/emercoin.conf"` this will grab configuration from `emercoin.conf` to `config.json` file where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
 * Run `php -S localhost:8000 pblog.phar` to start a server
+
+## Run
 * Run browser with address `http://localhost:8000`
 * Make sure your Emercoin wallet is running and unblocked
 
-### Build
+## Build
 Build Phar using `php compile.php`
 And configure `conf/conf.php` and set
 ```
