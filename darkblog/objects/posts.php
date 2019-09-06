@@ -27,11 +27,13 @@ class posts {
         $oposts = new \darkblog\db\posts();
         $okeywords = new \darkblog\db\keywords();
         $ousers = new \darkblog\db\users();
-        
         $post = $oposts->getByName($post_name);
         $post['_keywords'] = $post['keywords'];
         $lang_id = $_SESSION['lang'];
-        $post['keywords'] = $okeywords->selectByPost($post['id'], $lang_id);
+        
+        if(!empty($post['id']))
+            $post['keywords'] = $okeywords->selectByPost($post['id'], $lang_id);
+
         if(!empty($post['user_id']))
             $post['user'] = $ousers->get($post['user_id']);
         

@@ -28,8 +28,11 @@ class users {
         
         $user = $ouser->getByName($name);
         $lang_id = $_SESSION['lang'];
-        $user['keywords'] = $okeywords->selectByUser($user['id'], $lang_id);
-        $user['users_posts'] = $oposts->selectByUser($user['id'], $lang_id);
+        
+        if(!empty($user))
+            $user['keywords'] = $okeywords->selectByUser($user['id'], $lang_id);
+        if(!empty($user))
+            $user['users_posts'] = $oposts->selectByUser($user['id'], $lang_id);
         
         return $user;
     }
