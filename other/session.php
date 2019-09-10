@@ -41,7 +41,6 @@ class session {
         
         if(SQLITE) {
             $row = $this->Sql->querySingle("SELECT `data` FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
-            var_dump($row);
             return $row['data'];
         }
         else {
