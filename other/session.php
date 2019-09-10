@@ -40,7 +40,9 @@ class session {
         $usr_ip = $_SERVER['REMOTE_ADDR'];//echo "SELECT `data` FROM $this->Table WHERE skey = '$id'";
         
         if(SQLITE) {
-            return $this->Sql->querySingle("SELECT `data` FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+            $row = $this->Sql->querySingle("SELECT `data` FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+            var_dump($row);
+            return $row['data'];
         }
         else {
             $st = $this->Sql->prepare("SELECT `data` FROM $this->Table WHERE skey = :skey");
@@ -54,10 +56,10 @@ class session {
     function write($id, $sess_data) {
         //global $Sql, $TABLES;
         $user_ip = $_SERVER['REMOTE_ADDR'];
-        $sess_data = $sess_data;
-        
+        //$sess_data = $sess_data;
         if(SQLITE) {
-            $rc = $this->Sql->querySingle("SELECT COUNT(skey) FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+            $row = $this->Sql->querySingle("SELECT COUNT(skey) AS ccc FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+            $rc = $row['ccc'];
         }
         else {
             $st = $this->Sql->prepare("SELECT COUNT(skey) FROM $this->Table WHERE skey = :skey");
@@ -68,7 +70,7 @@ class session {
         }
         //print "writing session(".get_magic_quotes_gpc().") ... ";
         if($rc == 0) {
-            if(SQLITE) {
+            if(SQLITE) {                
                 $user_ip = $this->Sql->escapeString($user_ip);
                 $id = $this->Sql->escapeString($id);
                 $sess_data = $this->Sql->escapeString($sess_data);
@@ -89,7 +91,7 @@ class session {
             }
         }
         else {
-            if(SQLITE) {
+            if(SQLITE) { 
                 $user_ip = $this->Sql->escapeString($user_ip);
                 $id = $this->Sql->escapeString($id);
                 $sess_data = $this->Sql->escapeString($sess_data);
