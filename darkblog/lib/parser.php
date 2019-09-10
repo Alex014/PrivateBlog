@@ -46,8 +46,8 @@ class parser {
         $result['content'] = mb_eregi_replace('[^@]@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);
         $result['content'] = mb_eregi_replace('^@(\w+)\s*=\s*[^\n^\'^""]+', '', $result['content']);
         
-        $result['content'] = str_replace("\n\n\n", '', $result['content']);
-        $result['content'] = str_replace("\n\n", '', $result['content']);
+        //$result['content'] = str_replace("\n\n\n", '', $result['content']);
+        //$result['content'] = str_replace("\n\n", '', $result['content']);
         
         //if($bl2br)
         //    $result['content'] = str_replace("\n\n", '<br/>', $result['content']);*/
@@ -158,7 +158,6 @@ class parser {
         $build_output = array();
         
         $size = strlen($text);
-        
         if($size < self::$BLOCK_SIZE) {
             //Build main part
             $text .= self::build_tail($vars);
@@ -170,8 +169,9 @@ class parser {
 
             $text_final = '';
             $atext_final = array();
-            $atext = preg_split("/\s+/", $text);
-            
+            //$atext = preg_split("/\s+/", $text);
+            $atext = explode(" ", $text);
+            //var_dump($atext);
             $next_part = '';
             foreach ($atext as $part) {
                 if(strlen($next_part.' '.$part) < self::$BLOCK_SIZE) {

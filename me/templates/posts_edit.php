@@ -199,7 +199,12 @@ $(document).on('click', '#editor', function() {
             ['screen', ['codeview', 'fullscreen']]
           ]});*/
         
-        simplemde = new SimpleMDE({ element: $(".editor")[0] });
+        simplemde = new SimpleMDE({ 
+            toolbar: ["bold", "italic", "strikethrough", "heading", "|", "quote", "code", "horizontal-rule", "|", 
+                "unordered-list", "ordered-list", "|", "link", "image", "|",
+                "preview", "side-by-side", "fullscreen", "|", "guide"],
+            element: $(".editor")[0] 
+        });
         $(this).data('enabled', '1')
     }
     

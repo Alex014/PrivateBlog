@@ -23,7 +23,7 @@ if(!empty($_GET['page'])) \darkblog\db\pager::$page = (int)$_GET['page'];
 function parse_post(&$post) {
     $p = new \darkblog\lib\Parsedown();
     $post['content'] = $p->parse($post['content']);
-    $post['content'] = nl2br($post['content']);
+    //$post['content'] = nl2br($post['content']);
     
     if(!empty($post['replies']))
         foreach ($post['replies'] as $key => $subpost) {

@@ -352,21 +352,45 @@ class posts {
     public function newPost($name, $content, $vars, $days) {
         $build_output = \darkblog\lib\parser::build($content, $name, $vars);
         //var_dump($build_output); die();
-        foreach ($build_output as $index => $value) {
-            echo $index;
-            if($index == 0) {
-                \darkblog\lib\emercoin::name_new('blog:'.$name, $value, $days, '', '');
-            }
-            else {
-                \darkblog\lib\emercoin::name_new('blog:'.$name.'_'.$index, $value, $days, '', '');
+
+        if(count($build_output) == 1) {
+            \darkblog\lib\emercoin::name_new('blog:'.$name, $build_output[0], $days, '', '');
+        }
+        elseif(count($build_output) == 2) {
+            \darkblog\lib\emercoin::name_new('blog:'.$name, $build_output[1], $days, '', '');
+        }
+        else {
+            foreach ($build_output as $index => $value) {
+                if($index == 0) {
+                    \darkblog\lib\emercoin::name_new('blog:'.$name, $value, $days, '', '');
+                }
+                else {
+                    \darkblog\lib\emercoin::name_new('blog:'.$name.'_'.$index, $value, $days, '', '');
+                }
             }
         }
     }
     
     public function editPost($name, $content, $vars, $days) {
+        //var_dump($content);
         $build_output = \darkblog\lib\parser::build($content, $name, $vars);
-        
-        \darkblog\lib\emercoin::name_update('blog:'.$name, $build_output[0], $days, '', '');
+
+        if(count($build_output) == 1) {
+            \darkblog\lib\emercoin::name_update('blog:'.$name, $build_output[0], $days, '', '');
+        }
+        elseif(count($build_output) == 2) {
+            \darkblog\lib\emercoin::name_update('blog:'.$name, $build_output[1], $days, '', '');
+        }
+        else {
+            foreach ($build_output as $index => $value) {
+                if($index == 0) {
+                    \darkblog\lib\emercoin::name_update('blog:'.$name, $value, $days, '', '');
+                }
+                else {
+                    \darkblog\lib\emercoin::name_new('blog:'.$name.'_'.$index, $value, $days, '', '');
+                }
+            }
+        }
     }
     
     public function deletePost($name) {
