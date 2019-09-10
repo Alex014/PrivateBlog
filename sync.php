@@ -18,6 +18,16 @@ require_once 'conf/conf.php';
 require_once 'conf/db.php';
 require_once 'conf/emercoin.conf.php';
 
+try {    
+    \darkblog\lib\emercoin::getinfo();
+} catch (Exception $exc) {
+    $err = $exc->getMessage();
+    if(strpos($err, 'Connection refused') !== false) {
+        echo 'refused';
+        die();
+    }
+}
+
 $users = new \darkblog\objects\users();
 $posts = new \darkblog\objects\posts();
 

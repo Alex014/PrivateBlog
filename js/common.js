@@ -5,7 +5,11 @@ $(document).ready(function() {
         $.get('/sync.php', function(result) {
             $(self).text('DONE !');
             setTimeout(function() {
-                if(result.trim() == 'OK') {
+                if(result.trim() == 'refused') {
+                    alert('Connection refused !\nDid you run the Emercoin wallet ?');
+                    $(self).text('SYNC');
+                }
+                else if(result.trim() == 'OK') {
                     window.location.reload();
                 }
                 else {
