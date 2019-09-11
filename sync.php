@@ -26,6 +26,10 @@ try {
         echo 'refused';
         die();
     }
+    else {
+        echo $err;
+        die();
+    }
 }
 
 $users = new \darkblog\objects\users();
