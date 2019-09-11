@@ -13,28 +13,38 @@ if(empty($filename)) {
     die();
 }
 
-if(!file_exists($filename)) {
-	$dirname = dirname($filename);
-	if(!file_exists($dirname)) {
-		echo "Directory '$dirname' does not exist !\n";
-		echo "Did you install Emercoin wallet ?";
-		die();
-	}
-	
-    touch($filename);
-    file_put_contents($filename, "rpcuser=rpcuser
+$conf_contents = <<<INI
+rpcuser=rpcuser
 rpcpassword=rpcpassword
 rpcallowip=127.0.0.1
 rpcport=8332
 server=1
-listen=1");
+listen=1
+INI;
+
+if(!file_exists($filename)) {
+    $dirname = dirname($filename);
+    if(!file_exists($dirname)) {
+            echo "Directory '$dirname' does not exist !\n";
+            echo "Did you install Emercoin wallet ?";
+            die();
+    }
+	
+    touch($filename);
+    file_put_contents($filename, $conf_contents);
     echo "File '$filename' created, restart Emercoin service !";
     die();
 }
 
-
 $content = file_get_contents($filename);
-$content = preg_replace("/(.+?)(#.+?)(\n)/is", '$1$3', $content);
+
+if(empty(trim($content))) {
+    file_put_contents($filename, $conf_contents);
+    $content = $conf_contents;
+} else {
+    $content = preg_replace("/(.+?)(#.+?)(\n)/is", '$1$3', $content);
+}
+    
 $config = parse_ini_string($content);
 
 $configfile = 'config.json';
