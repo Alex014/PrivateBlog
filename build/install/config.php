@@ -41,6 +41,9 @@ $content = file_get_contents($filename);
 if(empty(trim($content))) {
     file_put_contents($filename, $conf_contents);
     $content = $conf_contents;
+    echo "File '$filename' was empty\n"
+            . "Config was writen, \n"
+            . "restart Emercoin service !";
 } else {
     $content = preg_replace("/(.+?)(#.+?)(\n)/is", '$1$3', $content);
 }
