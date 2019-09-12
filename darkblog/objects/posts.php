@@ -274,7 +274,7 @@ class posts {
 
         foreach ($posts as $post) {
             $metadata = unserialize($post['metadata']);
-            echo $post['name'].": ";
+            //echo $post['name'].": ";
             //Lang
             $lang = $post['lang'];
             $lang_id = $post['lang_id'];
@@ -289,7 +289,7 @@ class posts {
             
             if(empty($post['lang_id']))
                 $oposts->updateLang($post['id'], $lang_id);
-            echo " lang-ok ";
+            //echo " lang-ok ";
             //User
             if(!empty($post['username'])) {
                 $user = $ousers->getByName($post['username']);
@@ -301,7 +301,7 @@ class posts {
                         $oposts->updateUser($post['id'], $user_id);
                 }
             }
-            echo " blogger-ok ";
+            //echo " blogger-ok ";
             
             //Keywords
             if(!empty($post['keywords'])) {
@@ -323,7 +323,7 @@ class posts {
                     $opk->insert_pk($keyword_id, $post['id']);
                 }
             }
-            echo " Keywords-ok ";
+            //echo " Keywords-ok ";
 
             //Reply to other post
             if(!empty($post['reply'])) {
@@ -331,12 +331,12 @@ class posts {
                 if(!empty($reply_id))
                     $oposts->updateReplyPost($post['id'], $reply_id);
             }
-            echo " reply-ok ";
+            //echo " reply-ok ";
             
             //Verified
             $oposts->updateVerified($post['id']);
             
-            echo " ... OK\n\n ";
+            //echo " ... OK\n\n ";
         }
         
         
