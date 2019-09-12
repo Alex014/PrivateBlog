@@ -243,7 +243,7 @@ class posts {
         
         $posts = $this->blockchanGetPosts();
         $insert_posts = array();
-        
+        echo " \n\n blockchanGetPosts() - OK \n\n "; 
         foreach ($posts as $postsname => $post) {
             foreach ($post as $k => $v) {
                 if($k != 'content') $_post[$k] = $v;
@@ -267,28 +267,29 @@ class posts {
         //Inserting primary posts
         $this->insertPosts($insert_posts);
         
+        echo " \n\n insertPosts() - OK \n\n "; 
+        echo " \n\n Updating posts ... \n\n "; 
         //Inserting other data (from posts) and updating posts
         $posts = $oposts->selectAll(false);
 
         foreach ($posts as $post) {
             $metadata = unserialize($post['metadata']);
-            
+            echo $post['name'].": ";
             //Lang
             $lang = $post['lang'];
             $lang_id = $post['lang_id'];
             if(empty($lang)) $lang = 'en';
-            $olangs->insertIgnore(array('name' => $lang));
             
-            if($olangs->affectedRows() == 0) {
-                $lang_id = $olangs->getIdByName($lang);
-            }
-            else {
+            $lang_id = $olangs->getIdByName($lang);
+            
+            if(empty($lang_id)) {
+                $olangs->insert(array('name' => $lang));
                 $lang_id = $olangs->insertId();
             }
             
             if(empty($post['lang_id']))
                 $oposts->updateLang($post['id'], $lang_id);
-
+            echo " lang-ok ";
             //User
             if(!empty($post['username'])) {
                 $user = $ousers->getByName($post['username']);
@@ -300,6 +301,7 @@ class posts {
                         $oposts->updateUser($post['id'], $user_id);
                 }
             }
+            echo " blogger-ok ";
             
             //Keywords
             if(!empty($post['keywords'])) {
@@ -308,19 +310,20 @@ class posts {
         
                 foreach ($keywords as $keyword) {
                     $keyword = trim($keyword);
-                    $okeywords->insertIgnore(array('word' => $keyword));
+            
+                    $keyword_id = $okeywords->getIdByKeyword($keyword);
 
-                    if($okeywords->affectedRows() == 0) {
-                        $keyword_id = $okeywords->getIdByKeyword($keyword);
-                    }
-                    else {
+                    if(empty($keyword_id)) {
+                        $okeywords->insert(array('word' => $keyword));
                         $keyword_id = $okeywords->insertId();
                     }
+
                     $okl->insert_pk($keyword_id, $lang_id);
                     
                     $opk->insert_pk($keyword_id, $post['id']);
                 }
             }
+            echo " Keywords-ok ";
 
             //Reply to other post
             if(!empty($post['reply'])) {
@@ -328,10 +331,16 @@ class posts {
                 if(!empty($reply_id))
                     $oposts->updateReplyPost($post['id'], $reply_id);
             }
+            echo " reply-ok ";
             
             //Verified
             $oposts->updateVerified($post['id']);
+            
+            echo " ... OK\n\n ";
         }
+        
+        
+        echo " \n\n updatePosts() - OK \n\n "; 
     }
     
     public function getMyPosts() {

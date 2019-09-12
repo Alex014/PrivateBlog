@@ -5,8 +5,8 @@ define('PHAR', true);
 define('SQLITE', true);
 
 if(PHAR) {
-    error_reporting(0);
-    ini_set('display_errors', 0);
+    error_reporting(E_ALL - E_NOTICE - E_DEPRECATED);
+    ini_set('display_errors', 1);
 } else {
     error_reporting(E_ALL - E_NOTICE - E_DEPRECATED);
     ini_set('display_errors', 1);

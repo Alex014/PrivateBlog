@@ -7,7 +7,7 @@ $(document).ready(function() {
             type: 'GET',
             url: '/sync.php',
             dataType: 'text',
-            timeout: 3600,
+            timeout: 3600000,
         }).done(function(result) {
             $(self).text('DONE !');
             setTimeout(function() {

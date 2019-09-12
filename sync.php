@@ -39,5 +39,6 @@ $posts->clearAll();
 $users->importUsers();
 $posts->importPosts();
 
-//ob_clean();
+echo ' POSTS OK ';
+ob_clean();
 echo 'OK';
