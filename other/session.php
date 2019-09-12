@@ -40,7 +40,7 @@ class session {
         $usr_ip = $_SERVER['REMOTE_ADDR'];//echo "SELECT `data` FROM $this->Table WHERE skey = '$id'";
         
         if(SQLITE) {
-            $row = $this->Sql->querySingle("SELECT `data` FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
+            $row = $this->Sql->querySingle("SELECT data FROM $this->Table WHERE skey = "."'".$this->Sql->escapeString($id)."'", TRUE);
             return $row['data'];
         }
         else {
