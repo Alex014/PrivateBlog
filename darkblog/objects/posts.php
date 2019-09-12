@@ -174,7 +174,7 @@ class posts {
         $linked_posts = array();
         
         //Parsing ...
-        echo "Parsing ...";
+        echo "Parsing ...<br>";
         foreach ($posts as $post) {
             $postname = explode(':', $post['name']);
             $postname = array_slice($postname, 1);
@@ -194,9 +194,11 @@ class posts {
         }
         
         //Linking ...
-        echo "Linking ...";
+        echo "Linking ...<br><br><br>";
         foreach ($parsed_posts as $postname => $post) {
+            echo "$postname ... ";
             $linked_posts[$postname] = \darkblog\lib\parser::link($parsed_posts, $post);
+            echo "OK<br>";
         }
         
         return $linked_posts;
