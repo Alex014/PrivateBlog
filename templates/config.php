@@ -14,7 +14,7 @@
         <select class="form-control" id="lang" name="lang">
           <option value="">None</option>
           <?foreach($languages as $lng):?>
-            <option value="<?=$lng['id']?>" <? if($lng['id'] == $lang): ?> SELECTED="" <? endif; ?> ><?=$lng['name']?></option>
+            <option value="<?=$lng['name']?>" <? if($lng['name'] == $lang): ?> SELECTED="" <? endif; ?> ><?=$lng['name']?></option>
           <?endforeach;?>
         </select>
     </div>

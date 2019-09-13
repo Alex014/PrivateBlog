@@ -8,13 +8,18 @@ namespace darkblog\objects;
  */
 class users {
     
+    public function __construct() {
+        $olang = new \darkblog\db\langs();
+        $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+    }
+    
     public function getUser($user_id) {
         $ouser = new \darkblog\db\users();
         $okeywords = new \darkblog\db\keywords();
         $oposts = new \darkblog\db\posts();
         
         $user = $ouser->get($user_id);
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         $user['keywords'] = $okeywords->selectByUser($user_id, $lang_id);
         $user['users_posts'] = $oposts->selectByUser($user_id, $lang_id);
         
@@ -27,7 +32,7 @@ class users {
         $oposts = new \darkblog\db\posts();
         
         $user = $ouser->getByName($name);
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         
         if(!empty($user))
             $user['keywords'] = $okeywords->selectByUser($user['id'], $lang_id);
@@ -39,14 +44,14 @@ class users {
     
     public function getByKeyword($keyword_id) {
         $ouser = new \darkblog\db\users();
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         return $ouser->getByKeyword($keyword_id, $lang_id);
     }
     
     public function getUsers() {
         $ousers = new \darkblog\db\users();
-        $lang_id = $_SESSION['lang'];
-        return $ousers->selectAll($lang_id, $lang_id);
+        $lang_id = $this->lang_id;
+        return $ousers->selectAll($lang_id);
     }
     
     public function insertUsers($users) {

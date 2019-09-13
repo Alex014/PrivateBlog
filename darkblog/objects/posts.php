@@ -8,6 +8,11 @@ namespace darkblog\objects;
  */
 class posts {
     
+    public function __construct() {
+        $olang = new \darkblog\db\langs();
+        $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+    }
+    
     public function getPost($post_id) {
         $oposts = new \darkblog\db\posts();
         $okeywords = new \darkblog\db\keywords();
@@ -15,7 +20,7 @@ class posts {
         
         $post = $oposts->get($post_id);
         $post['_keywords'] = $post['keywords'];
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         $post['keywords'] = $okeywords->selectByPost($post_id, $lang_id);
         if(!empty($post['user_id']))
             $post['user'] = $ousers->get($post['user_id']);
@@ -29,7 +34,7 @@ class posts {
         $ousers = new \darkblog\db\users();
         $post = $oposts->getByName($post_name);
         $post['_keywords'] = $post['keywords'];
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         
         if(!empty($post['id']))
             $post['keywords'] = $okeywords->selectByPost($post['id'], $lang_id);
@@ -42,7 +47,7 @@ class posts {
     
     public function getByKeyword($keyword_id) {
         $oposts = new \darkblog\db\posts();
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         return $oposts->getByKeyword($keyword_id, $lang_id);
     }
     
@@ -74,7 +79,7 @@ class posts {
         $oposts = new \darkblog\db\posts();
         $okeywords = new \darkblog\db\keywords();
         
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         $posts = $oposts->selectByTitle($title, $lang_id);
         
         $post_ids = array();
@@ -99,7 +104,7 @@ class posts {
         $oposts = new \darkblog\db\posts();
         $okeywords = new \darkblog\db\keywords();
         
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         $posts = $oposts->selectByContentRegexp($regexp, $lang_id);
         
         $post_ids = array();
@@ -128,7 +133,7 @@ class posts {
             throw new Exception('At least oe param must not be empty');
         }
         
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         $posts = $oposts->selectByContentMultiple($all_words, $any_words, $lang_id);
         
         $post_ids = array();
@@ -196,9 +201,9 @@ class posts {
         //Linking ...
         echo "Linking ...<br><br><br>";
         foreach ($parsed_posts as $postname => $post) {
-            echo "$postname ... ";
+            //echo "$postname ... ";
             $linked_posts[$postname] = \darkblog\lib\parser::link($parsed_posts, $post);
-            echo "OK<br>";
+            //echo "OK<br>";
         }
         
         return $linked_posts;
@@ -243,7 +248,7 @@ class posts {
         
         $posts = $this->blockchanGetPosts();
         $insert_posts = array();
-        echo " \n\n blockchanGetPosts() - OK \n\n "; 
+        echo " <br><br> blockchanGetPosts() - OK <br><br> "; 
         foreach ($posts as $postsname => $post) {
             foreach ($post as $k => $v) {
                 if($k != 'content') $_post[$k] = $v;
@@ -267,17 +272,17 @@ class posts {
         //Inserting primary posts
         $this->insertPosts($insert_posts);
         
-        echo " \n\n insertPosts() - OK \n\n "; 
-        echo " \n\n Updating posts ... \n\n "; 
+        echo " <br><br> insertPosts() - OK <br><br> "; 
+        echo " <br><br> Updating posts ... <br><br> "; 
         //Inserting other data (from posts) and updating posts
         $posts = $oposts->selectAll(false);
 
         foreach ($posts as $post) {
+            $update = array();
             $metadata = unserialize($post['metadata']);
             //echo $post['name'].": ";
             //Lang
             $lang = $post['lang'];
-            $lang_id = $post['lang_id'];
             if(empty($lang)) $lang = 'en';
             
             $lang_id = $olangs->getIdByName($lang);
@@ -287,8 +292,9 @@ class posts {
                 $lang_id = $olangs->insertId();
             }
             
-            if(empty($post['lang_id']))
-                $oposts->updateLang($post['id'], $lang_id);
+            $update['lang_id'] = $lang_id;
+            //if(empty($post['lang_id']))
+                //$oposts->updateLang($post['id'], $lang_id);
             //echo " lang-ok ";
             //User
             if(!empty($post['username'])) {
@@ -297,8 +303,10 @@ class posts {
                     $user_id = $user['id'];
                     //var_dump($user['id'], $user['key'], $post['username'], $post['sig'], $post['name']);
                     //var_dump($this->blockchanVerifyPost($user['key'], $post['username'], $post['sig'], $post['name']));
-                    if($this->blockchanVerifyPost($user['key'], $post['username'], $post['sig'], $post['name']))
-                        $oposts->updateUser($post['id'], $user_id);
+                    if($this->blockchanVerifyPost($user['key'], $post['username'], $post['sig'], $post['name'])) {
+                        $update['user_id'] = $user_id;
+                        //$oposts->updateUser($post['id'], $user_id);
+                    }
                 }
             }
             //echo " blogger-ok ";
@@ -329,18 +337,21 @@ class posts {
             if(!empty($post['reply'])) {
                 $reply_id = $oposts->getIdByName($post['reply']);
                 if(!empty($reply_id))
-                    $oposts->updateReplyPost($post['id'], $reply_id);
+                    $update['reply_id'] = $reply_id;
+                    //$oposts->updateReplyPost($post['id'], $reply_id);
             }
             //echo " reply-ok ";
             
             //Verified
-            $oposts->updateVerified($post['id']);
+            //$oposts->updateVerified($post['id']);
+            $update['v'] = 1;
+            $oposts->update($post['id'], $update);
             
-            //echo " ... OK\n\n ";
+            //echo " ... OK<br><br> ";
         }
         
         
-        echo " \n\n updatePosts() - OK \n\n "; 
+        echo " <br><br> updatePosts() - OK <br><br> "; 
     }
     
     public function getMyPosts() {
@@ -447,7 +458,7 @@ class posts {
         
         $post = $oposts->get($post_id);
         $post['_keywords'] = $post['keywords'];
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         $post['keywords'] = $okeywords->selectByPost($post_id, $lang_id);
         if(!empty($post['user_id']))
             $post['user'] = $ousers->get($post['user_id']);

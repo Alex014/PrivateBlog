@@ -22,4 +22,10 @@ class langs {
         
         return $olangs->selectAll();
     }
+    
+    public function getIdByName($name) {
+        $olangs = new \darkblog\db\langs();
+        
+        return $olangs->getIdByName($name);
+    }
 }

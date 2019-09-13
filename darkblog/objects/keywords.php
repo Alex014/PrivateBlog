@@ -8,6 +8,12 @@ namespace darkblog\objects;
  */
 class keywords {
     
+    public function __construct() {
+        $olang = new \darkblog\db\langs();
+        $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+        var_dump($_SESSION['lang'], $this->lang_id);
+    }
+    
     public function getKeyword($keyword_id) {
         $okeywords = new \darkblog\db\keywords();
         $keyword = $okeywords->get($keyword_id);
@@ -22,13 +28,13 @@ class keywords {
     
     public function getByKeyword($keyword_id) {
         $okeywords = new \darkblog\db\keywords();
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         return $okeywords->getByKeyword($keyword_id, $lang_id);
     }
     
     public function getKeywords() {
         $okeywords = new \darkblog\db\keywords();
-        $lang_id = $_SESSION['lang'];
+        $lang_id = $this->lang_id;
         return $okeywords->selectAll($lang_id);
     }
     
