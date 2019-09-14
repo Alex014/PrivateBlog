@@ -7,6 +7,8 @@ The blockchain values from NVS gets parsed by this aggregator using @key="value"
 
 YouTube chanel https://www.youtube.com/channel/UC_iKEMc1lkxeMus2yArktLQ !!!
 
+Installer https://github.com/tolik-punkoff/privateblog-installer and https://mega.nz/#!sJcnWCaa!fKG5DRC8cehMhitpeerb-TrbaQGA_oP1cUd-z3tKjFo by tolik-punkoff
+
 ## Install
 ### Linux
 `bash build_and_install_linux.sh` to install to any linux
@@ -97,15 +99,8 @@ Max level of subposts is 5
  $hash_of_file="link caption" - link to file
 
 ## Links
-* DEMO http://192.243.101.161 OR http://private.emercoin.dev
 * Emercoin http://emercoin.com/
 * Market cap http://coinmarketcap.com/currencies/emercoin/#markets
-* Forum (en) https://bitcointalk.org/index.php?topic=362513.0
-* Forum (ru) https://forum.bits.media/index.php?/topic/3408-emc-emercoin-pos/
-
-###### writen in PHP
-###### darkblog.sql - mysql database
-###### cron.php - completely eraises all data and agregates new data from blockchain (run by cron)
 
 ## Uses
 
