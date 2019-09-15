@@ -146,7 +146,7 @@ class baseTable {
     
     public function queryFirstField($sql) {
         $args = func_get_args(); 
-            
+        
         if(SQLITE) {
             return $this->db->querySingle($this->_parse_sql_params($sql, $args), FALSE);
         }

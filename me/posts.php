@@ -22,7 +22,7 @@ if(!isset($_SESSION['filter']))
 
 if(isset($_POST['action']) && isset($_POST['username']) && isset($_POST['postname']) && isset($_POST['userkey']) && ($_POST['action'] == 'signpost')) {
     $oBloggers = new \darkblog\objects\users();
-
+    ob_clean();
     //try {
         echo $oBloggers->signPost($_POST['username'], $_POST['postname'], $_POST['userkey']);
     //} catch (Exception $ex) {

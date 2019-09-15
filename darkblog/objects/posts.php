@@ -10,7 +10,11 @@ class posts {
     
     public function __construct() {
         $olang = new \darkblog\db\langs();
-        $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+        $lang = $_SESSION['lang'];
+        if(!empty($lang))
+            $this->lang_id = $olang->getIdByName($lang);
+        else
+            $this->lang_id = 0;
     }
     
     public function getPost($post_id) {

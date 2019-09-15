@@ -10,7 +10,11 @@ class users {
     
     public function __construct() {
         $olang = new \darkblog\db\langs();
-        $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+        $lang = $_SESSION['lang'];
+        if(!empty($lang))
+            $this->lang_id = $olang->getIdByName($lang);
+        else
+            $this->lang_id = 0;
     }
     
     public function getUser($user_id) {
@@ -144,6 +148,7 @@ class users {
      * @return type
      */
     public function signPost($username, $post_name, $userkey) {
+        
         return \darkblog\lib\emercoin::signmessage($userkey, "$username:$post_name");
     }
     

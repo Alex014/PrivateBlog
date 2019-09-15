@@ -10,8 +10,11 @@ class keywords {
     
     public function __construct() {
         $olang = new \darkblog\db\langs();
-        $this->lang_id = $olang->getIdByName($_SESSION['lang']);
-        var_dump($_SESSION['lang'], $this->lang_id);
+        $lang = $_SESSION['lang'];
+        if(!empty($lang))
+            $this->lang_id = $olang->getIdByName($lang);
+        else
+            $this->lang_id = 0;
     }
     
     public function getKeyword($keyword_id) {
