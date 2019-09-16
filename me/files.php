@@ -23,8 +23,8 @@ try {
     $description = $exc->getMessage();
     if(strpos($description, 'Connection refused') !== false)
         $error = 'Connection refused';
-    elseif(strpos($description, 'passphrase') !== false)
-        $error = 'Wallet locked';
+    else
+        $error = 'Unknown error';
     require __DIR__.'/templates/error.php';
     require __DIR__.'/templates/footer.php';
     die();
@@ -33,9 +33,11 @@ try {
 
 
 
-$oFiles = new \darkblog\objects\files();
+if(empty($error)) {
+    $oFiles = new \darkblog\objects\files();
 
-$files = $oFiles->getMyFiles();
+    $files = $oFiles->getMyFiles();
+}
 
 //var_dump($files);
 require __DIR__.'/templates/files.php';

@@ -67,6 +67,38 @@ if(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'new') && isset($_FILES
     die();
 }
 
-require __DIR__.'/templates/files_new.php';
+
+
+$err = '';
+
+try {
+    $emercoinaddress = darkblog\lib\emercoin::getFirstAddress();
+    $signature = darkblog\lib\emercoin::signmessage($emercoinaddress, ''.time());
+} catch (Exception $ex) {
+    $err = $ex->getMessage();
+}
+
+if(empty($err)) {
+    require __DIR__.'/templates/files_new.php';
+}
+elseif(strpos($err, 'walletpassphrase') !== false) {
+    $error = 'Wallet locked';
+    $description = '<br>You must unlock the wallet<br> to update records or <br>sign the data using keys';
+    require __DIR__.'/templates/error.php';
+}
+elseif(strpos($err, 'block minting only') !== false) {
+    $error = 'Wallet unlocked for block minting only';
+    $description = '<br>You must unlock your wallet completely';
+    require __DIR__.'/templates/error.php';
+}
+elseif(strpos($err, 'Connection refused') !== false) {
+    $error = 'Connection refused';
+    $description = $err;
+}
+else {
+    $error = 'Unknown error';
+    $description = $err;
+    require __DIR__.'/templates/error.php';
+}
 
 require __DIR__.'/templates/footer.php';

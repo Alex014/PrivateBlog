@@ -77,6 +77,18 @@ class emercoin {
     return $result;
   }
   
+  public static function getFirstAddress() {  
+    $accounts = \darkblog\lib\emercoin::listaccounts();
+      
+    foreach ($accounts as $account => $ammount) {
+        $addresses = \darkblog\lib\emercoin::getAddressesByAccount($account);
+        foreach ($addresses as $addr) {
+            $address = $addr;
+        }
+    }
+    return $address;
+  }
+  
   /**
    * All Addresses by account
    * @param type $account

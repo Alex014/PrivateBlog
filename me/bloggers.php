@@ -48,8 +48,8 @@ try {
     $description = $exc->getMessage();
     if(strpos($description, 'Connection refused') !== false)
         $error = 'Connection refused';
-    elseif(strpos($description, 'passphrase') !== false)
-        $error = 'Wallet locked';
+    else
+        $error = 'Unknown error';
     require __DIR__.'/templates/error.php';
     require __DIR__.'/templates/footer.php';
     die();
@@ -58,9 +58,11 @@ try {
 
 
 
-$oBloggers = new \darkblog\objects\users();
+if(empty($error)) {
+    $oBloggers = new \darkblog\objects\users();
 
-$bloggers = $oBloggers->getMyUsers();
+    $bloggers = $oBloggers->getMyUsers();
+}
 
 //var_dump($bloggers);dfghfd
 require __DIR__.'/templates/bloggers.php';

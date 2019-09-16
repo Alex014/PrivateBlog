@@ -37,9 +37,25 @@ else {
     \darkblog\other\url::parse();
 }
 
-$oPosts = new \darkblog\objects\posts();
+try {
+    \darkblog\lib\emercoin::getinfo();
+} catch (Exception $exc) {
+    $error = 'Error';
+    $description = $exc->getMessage();
+    if(strpos($description, 'Connection refused') !== false)
+        $error = 'Connection refused';
+    else
+        $error = 'Unknown error';
+    require __DIR__.'/templates/error.php';
+    require __DIR__.'/templates/footer.php';
+    die();
+}
 
-$posts = $oPosts->getMyPosts();
+if(empty($error)) {
+    $oPosts = new \darkblog\objects\posts();
+
+    $posts = $oPosts->getMyPosts();
+}
 
 //var_dump($posts);
 
