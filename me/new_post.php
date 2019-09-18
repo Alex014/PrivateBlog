@@ -101,6 +101,7 @@ elseif(strpos($err, 'block minting only') !== false) {
 elseif(strpos($err, 'Connection refused') !== false) {
     $error = 'Connection refused';
     $description = $err;
+    require __DIR__.'/templates/error.php';
 }
 else {
     $error = 'Unknown error';
