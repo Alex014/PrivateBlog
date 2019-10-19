@@ -1,10 +1,26 @@
 <?php
-//define('PHAR', true);
-//define('SQLITE', true);
-//        $uid = posix_getuid();
-//        $shell_user = posix_getpwuid($uid);
-//        echo $shell_user['dir']; 
+//Checking for extensions ...
+$errors = [];
 
+if(!function_exists('mb_check_encoding')) {
+    $errors[] = "Extension '<b>mbstring</b>' not found";
+}
+
+if(!function_exists('curl_init')) {
+    $errors[] = "Extension '<b>curl</b>' not found";
+}
+
+if(!class_exists('SQLite3')) {
+    $errors[] = "Extension '<b>sqlite3</b>' not found";
+}
+
+if(!empty($errors)) {
+    ob_clean();
+    require 'templates/error.php';
+    die();
+}
+
+//Routing
 if(empty($_SERVER['REQUEST_URI']) || ($_SERVER['REQUEST_URI'] == '/')) {
     require_once __DIR__.'/bloggers.php';
 } elseif(($_SERVER['REQUEST_URI'] == '/me') || ($_SERVER['REQUEST_URI'] == '/me/')) {
