@@ -19,7 +19,7 @@ And go to `/home/{your-username}/pblog` and run `./run.sh`
 * Instal MS Visual Studio Redistributable (found here `https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads`)
 * Run `build_and_install_windows.bat` and then run `run-private-blog.bat` from your desktop (the `build_and_install_windows.bat` will also copy and overwrite `C:\php\php.ini` with a new one)
 ### Manual (or other OS)
-* Make shure that *sqlite3* extension is on and *shorttags* (<?) is on in *php.ini*
+* Make shure that *sqlite3* *mbstring* *xmlrpc* *curl* extensions is on and *shorttags* (<?) is on in *php.ini*
 * Run `php compile.php` to build `pblog.phar` and copy it to `build` directory
 * Then go to `build\install\other` and execute
     `php config.php -f="{EMERCOIN}/emercoin.conf"` this will grab configuration from `emercoin.conf` to `config.json` file where {EMERCOIN} is emercoin wallet directory with emercoin.conf, wallet.dat and blockchain DB
