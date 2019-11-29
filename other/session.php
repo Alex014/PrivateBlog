@@ -13,12 +13,12 @@ class session {
 
         $this->gc();
 
-        session_set_save_handler(   array(&$this, "open"),
+        $res = session_set_save_handler(   array(&$this, "open"),
                                     array(&$this, "close"),
                                     array(&$this, "read"),
                                     array(&$this, "write"),
                                     array(&$this, "destroy"),
-                                    array(&$this, "gc"));		
+                                    array(&$this, "gc"));	
         session_start();
     }
 
@@ -56,12 +56,16 @@ class session {
             $st->execute(array('skey' => $id));
             $row = $st->fetch();
             $st->closeCursor();
-            return $row[0];
+            
+            if(empty($row))
+                $res = "";
+            else
+                $res = $row[0];
+            return $res;
         }
     }
 	
     function write($id, $sess_data) {
-        //global $Sql, $TABLES;
         $user_ip = $_SERVER['REMOTE_ADDR'];
         //$sess_data = $sess_data;
         if(SQLITE) {

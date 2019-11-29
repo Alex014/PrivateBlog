@@ -29,7 +29,7 @@ $records = $_SESSION['records'];
 if(empty($lang)) $lang = '';
 if(empty($records)) $records = 100;
 
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
 require 'templates/header.php';
 require 'templates/config.php';

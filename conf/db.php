@@ -183,8 +183,7 @@ else {
     $connection->query('SET NAMES "utf8"');
     //Starting DB-based session
     require(dirname(__FILE__).'/../other/session.php');
-    $session = new session($connection, 'session');
-
+    $session = new session(config::$db, 'session');
     
     require(dirname(__FILE__).'/../other/meekrodb.class.php');
     DB::$user = 'root';
