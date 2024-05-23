@@ -23,11 +23,11 @@ if(isset($_POST['lang']) && isset($_POST['records'])) {
     if($_SESSION['records'] < 10) $_SESSION['records'] = 10;
 }
 
-$lang = $_SESSION['lang'];
-$records = $_SESSION['records'];
+$lang = '';
+$records = 100;
 
-if(empty($lang)) $lang = '';
-if(empty($records)) $records = 100;
+if(!empty($_SESSION['lang'])) $lang = $_SESSION['lang'];
+if(!empty($_SESSION['records'])) $records = $_SESSION['records'];
 
 //var_dump($_SESSION);
 

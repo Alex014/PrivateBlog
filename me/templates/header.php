@@ -92,6 +92,7 @@
             <li role="presentation" <?if($page == 'bloggers'):?>class="active"<?endif;?>><a href="/me/bloggers.php">My Bloggers</a></li>
             <li role="presentation" <?if($page == 'new_file'):?>class="active"<?endif;?>><a href="/me/new_file.php">Upload a file</a></li>
             <li role="presentation" <?if($page == 'files'):?>class="active"<?endif;?>><a href="/me/files.php">My Files</a></li>
+            <li role="presentation"><a href=#  class="__sync">SYNC</a></li>
             <li role="presentation"><a href="/">BACK &gt; &gt; &gt;</a></li>
           </ul>
         </div><!--/.nav-collapse -->

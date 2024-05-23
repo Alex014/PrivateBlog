@@ -23,7 +23,10 @@ if(isset($_REQUEST['action']) && ($_REQUEST['action'] == 'new') && isset($_FILES
     $name = $_REQUEST['name'];
     $data = array();
     
-    $value = trim($_REQUEST['content']);
+    $value = '';
+    if (isset($_REQUEST['content'])) {
+        $value = trim($_REQUEST['content']);
+    }
 
     $parts = \darkblog\lib\files::split_to_array($_FILES['file']['tmp_name']);
     $count = count($parts);

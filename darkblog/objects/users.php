@@ -7,14 +7,14 @@ namespace darkblog\objects;
  * @author user
  */
 class users {
+
+    private $lang_id = 0;
     
     public function __construct() {
         $olang = new \darkblog\db\langs();
-        $lang = $_SESSION['lang'];
-        if(!empty($lang))
-            $this->lang_id = $olang->getIdByName($lang);
-        else
-            $this->lang_id = 0;
+        if(isset($_SESSION) && isset($_SESSION['lang'])) {
+            $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+        }
     }
     
     public function getUser($user_id) {
@@ -93,7 +93,13 @@ class users {
      * @return type
      */
     public function blockchanVerifyUser($userkey, $usersig, $username) {
-        return \darkblog\lib\emercoin::verifymessage($userkey, $usersig, $username);
+        try {
+            return \darkblog\lib\emercoin::verifymessage($userkey, $usersig, $username);
+        } catch (\Throwable $exc) {
+            if (false !== strpos($exc->getMessage(), 'Invalid address')) {
+                return False;
+            }
+        }
     }
     
     public function importUsers() {
@@ -127,9 +133,9 @@ class users {
             $blogger['name'] = $name[1];
             
             $vars = \darkblog\lib\parser::parse($blogger['value']);
-            $blogger['content'] = $vars['content'];
-            $blogger['key'] = $vars['key'];
-            $blogger['sig'] = $vars['sig'];
+            $blogger['content'] = \darkblog\lib\parser::null_empty('content', $vars);
+            $blogger['key'] = \darkblog\lib\parser::null_empty('key', $vars);
+            $blogger['sig'] = \darkblog\lib\parser::null_empty('sig', $vars);
             
             return $blogger;
         }, $bloggers);

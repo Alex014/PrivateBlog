@@ -20,10 +20,44 @@ require_once 'conf/emercoin.conf.php';
 
 $db = config::$db;
 
+$result = [];
+
 $q = $db->query("SELECT * FROM session ");
 while ($row = $q->fetchArray()) {
     $result[] = $row;
 }
                 
-var_dump($result);
-var_dump($_SESSION);
+// var_dump($result);
+// var_dump($_SESSION);
+
+// var_dump(\darkblog\lib\emercoin::listlabels());
+
+// var_dump(\darkblog\lib\emercoin::getAddressesByLabel(""));
+
+$addr = \darkblog\lib\emercoin::getFirstAddress();
+
+var_dump($addr);
+
+$signature = darkblog\lib\emercoin::signmessage($addr, ''.time());
+
+var_dump($signature);
+
+// $file = \darkblog\lib\emercoin::name_show("file:NeoWithGuns");
+// $file = json_decode($file['value'], TRUE);
+
+// ob_clean();
+
+// header('Content-type: "'.$file['content_type'].'"');
+// header('Content-Disposition: form-data; name="File";filename="'.$file['name'].'"');
+
+// $file = \darkblog\lib\emercoin::name_show("file:NeoWithGuns:1", "base64");
+// echo base64_decode($file['value']);
+
+// $file = \darkblog\lib\emercoin::name_show("file:NeoWithGuns:2", "base64");
+// echo base64_decode($file['value']);
+
+// $file = \darkblog\lib\emercoin::name_show("file:NeoWithGuns:3", "base64");
+// echo base64_decode($file['value']);
+
+// $file = \darkblog\lib\emercoin::name_show("file:NeoWithGuns:4", "base64");
+// echo base64_decode($file['value']);

@@ -28,7 +28,7 @@ if(PHAR) {
     
 } else {
     darkblog\lib\emercoin::$username = 'user';
-    darkblog\lib\emercoin::$password = 'hpe74xjkd';
+    darkblog\lib\emercoin::$password = 'user';
     darkblog\lib\emercoin::$address = 'localhost';
     darkblog\lib\emercoin::$port = '8332';
 }

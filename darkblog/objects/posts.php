@@ -7,14 +7,14 @@ namespace darkblog\objects;
  * @author user
  */
 class posts {
+
+    private $lang_id = 0;
     
     public function __construct() {
         $olang = new \darkblog\db\langs();
-        $lang = $_SESSION['lang'];
-        if(!empty($lang))
-            $this->lang_id = $olang->getIdByName($lang);
-        else
-            $this->lang_id = 0;
+        if(isset($_SESSION) && isset($_SESSION['lang'])) {
+            $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+        }
     }
     
     public function getPost($post_id) {
@@ -100,6 +100,14 @@ class posts {
         foreach ($_keywords as $keyword) {
             $keywords[$keyword['id']] = $keyword;
         }
+
+        $keywords = array_filter($keywords, function ($row) {
+            if (false === strpos($row['word'], '@') && false === strpos($row['word'], '\\') && false === strpos($row['word'], '"') && false === strpos($row['word'], '\'')) {
+                return $row;
+            } else {
+                return false;
+            }
+        });
         
         return array('posts' => $posts, 'keywords' => $keywords);
     }
@@ -125,6 +133,14 @@ class posts {
         foreach ($_keywords as $keyword) {
             $keywords[$keyword['id']] = $keyword;
         }
+
+        $keywords = array_filter($keywords, function ($row) {
+            if (false === strpos($row['word'], '@') && false === strpos($row['word'], '\\') && false === strpos($row['word'], '"') && false === strpos($row['word'], '\'')) {
+                return $row;
+            } else {
+                return false;
+            }
+        });
         
         return array('posts' => $posts, 'keywords' => $keywords);
     }
@@ -134,7 +150,7 @@ class posts {
         $okeywords = new \darkblog\db\keywords();
         
         if($all_words == '' && $any_words == '') {
-            throw new Exception('At least oe param must not be empty');
+            throw new \Exception('At least oe param must not be empty');
         }
         
         $lang_id = $this->lang_id;
@@ -154,6 +170,14 @@ class posts {
         foreach ($_keywords as $keyword) {
             $keywords[$keyword['id']] = $keyword;
         }
+
+        $keywords = array_filter($keywords, function ($row) {
+            if (false === strpos($row['word'], '@') && false === strpos($row['word'], '\\') && false === strpos($row['word'], '"') && false === strpos($row['word'], '\'')) {
+                return $row;
+            } else {
+                return false;
+            }
+        });
 
         return array('posts' => $posts, 'keywords' => $keywords);
     }
@@ -191,13 +215,13 @@ class posts {
                 $postname = implode(':', $postname);
                 
                 //Loading big values
-                if(strlen($post['value']) > 300) {
+                // if(strlen($post['value']) > 300) {
                     $_post = \darkblog\lib\emercoin::name_show($post['name'], 'base64');
                     $parsed_posts[$postname] = \darkblog\lib\parser::parse(base64_decode($_post['value']));
-                }
-                else {
-                    $parsed_posts[$postname] = \darkblog\lib\parser::parse(base64_decode($post['value']));
-                }
+                // }
+                // else {
+                //     $parsed_posts[$postname] = \darkblog\lib\parser::parse(base64_decode($post['value']));
+                // }
                 
             }
         }
@@ -239,7 +263,13 @@ class posts {
      * @return type
      */
     public function blockchanVerifyPost($userkey, $username, $postsig, $post_name) {
-        return \darkblog\lib\emercoin::verifymessage($userkey, $postsig, "$username:$post_name");
+        try {
+            return \darkblog\lib\emercoin::verifymessage($userkey, $postsig, "$username:$post_name");
+        } catch (\Throwable $exc) {
+            if (false !== strpos($exc->getMessage(), 'Invalid address')) {
+                return False;
+            }
+        }
     }
     
     public function importPosts() {
@@ -259,16 +289,16 @@ class posts {
             }
             
             if(isset($post['content'])) {
-                //var_dump($post['keywords'], \darkblog\lib\parser::nullempty($post['keywords'])); echo "<br/><br/><br/><br/><br/><br/>";
+                // var_dump($post['keywords'], \darkblog\lib\parser::null_empty('keywords', $post)); echo "<br/><br/><br/><br/><br/><br/>";
                 $insert_posts[] = array(
-                    'lang' => \darkblog\lib\parser::nullempty($post['lang']),
+                    'lang' => \darkblog\lib\parser::null_empty('lang', $post),
                     'name' => \darkblog\lib\parser::nullempty($postsname),
-                    'sig' => \darkblog\lib\parser::nullempty($post['sig']),	
-                    'username' => \darkblog\lib\parser::nullempty($post['username']),	
-                    'title' => \darkblog\lib\parser::nullempty($post['title']),	
-                    'reply' => \darkblog\lib\parser::nullempty($post['reply']),
-                    'content' => \darkblog\lib\parser::nullempty($post['content']),
-                    'keywords' => \darkblog\lib\parser::nullempty($post['keywords']),
+                    'sig' => \darkblog\lib\parser::null_empty('sig', $post),	
+                    'username' => \darkblog\lib\parser::null_empty('username', $post),	
+                    'title' => \darkblog\lib\parser::null_empty('title', $post),	
+                    'reply' => \darkblog\lib\parser::null_empty('reply', $post),
+                    'content' => \darkblog\lib\parser::null_empty('content', $post),
+                    'keywords' => \darkblog\lib\parser::null_empty('keywords', $post),
                     'metadata' => serialize($_post)
                 );
             }

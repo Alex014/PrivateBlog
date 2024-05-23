@@ -119,7 +119,13 @@
                 <tbody>
                     <? foreach($posts as $post): ?>
                     <tr>
-                        <td> <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['title']))?> </a> </td>
+                        <td> 
+                          <?php if(!empty($post['title'])):  ?>
+                          <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['title']))?> </a>
+                          <?php else: ?>
+                          <a href="/post.php?name=<?=$post['name']?>"> <?=nl2br(strip_tags($post['name']))?> </a>
+                          <?php endif; ?>
+                        </td>
                         <td><?=$post['keywords']?></td>
                     </tr>
                     <? endforeach; ?>

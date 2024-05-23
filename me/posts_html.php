@@ -46,7 +46,7 @@ foreach ($_posts as $post) {
     
     //Expired
     if(!$expired)
-        if($post['expired']) $equal = false;
+        if(!empty($post['expired'])) $equal = false;
     //Name/Title
     if(!empty($search)) {
         if(isset($post['vars']['title'])) {

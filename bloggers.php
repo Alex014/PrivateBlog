@@ -18,8 +18,13 @@ $users = new \darkblog\objects\users();
 
 \darkblog\other\url::parse();
 
-if($_GET['order'] == 'username') \darkblog\db\pager::$order = 'username';
-elseif($_GET['order'] == 'total') \darkblog\db\pager::$order = 'posts DESC';
+if (array_key_exists('order', $_GET)) {
+    if($_GET['order'] == 'username') {
+        \darkblog\db\pager::$order = 'username';
+    } elseif ($_GET['order'] == 'total') {
+        \darkblog\db\pager::$order = 'posts DESC';
+    }
+}
     
 if(!empty($_GET['page'])) \darkblog\db\pager::$page = (int)$_GET['page'];
 

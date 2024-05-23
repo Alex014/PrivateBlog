@@ -37,6 +37,8 @@ if(!empty($_GET['id'])) {
     if(isset($_GET['full'])) {
         $post = $oposts->getPost((int)$_GET['id']);
 
+        var_dump($post);
+
         if(!empty($post['id'])) {
             $post['replies'] = $oposts->getRepliesFull($post['id']);
             if(!empty($post['reply_id']))

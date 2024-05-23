@@ -167,7 +167,7 @@ class jsonRPCClient {
 				throw new \Exception('Incorrect response id (request id: '.$currentId.', response id: '.$responce['id'].')');
 			}
 			if (!is_null($responce['error'])) {
-        jsonRPCClient::$error = $responce['error'];
+        		jsonRPCClient::$error = $responce['error'];
 				throw new \Exception('Request error: '.$responce['error']['message']);
 			}
 			

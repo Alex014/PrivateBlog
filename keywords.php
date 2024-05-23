@@ -54,25 +54,28 @@ elseif(!empty($_GET['name'])) {
     $name = $_GET['name'];
     $keyword = $okeywords->getKeywordByName($name);
     
-    if($_GET['mode'] == 'bloggers') {
-        if($_GET['order'] == 'username') \darkblog\db\pager::$order = 'username';
-        elseif($_GET['order'] == 'total') \darkblog\db\pager::$order = 'posts DESC';
+    if (array_key_exists('mode', $_GET)) {
+        if($_GET['mode'] == 'bloggers') {
+            if (!empty($_GET['order'])) {
+                if($_GET['order'] == 'username') \darkblog\db\pager::$order = 'username';
+                elseif($_GET['order'] == 'total') \darkblog\db\pager::$order = 'posts DESC';
+            }
 
-        if(!empty($_GET['page'])) \darkblog\db\pager::$page = (int)$_GET['page'];
+            if(!empty($_GET['page'])) \darkblog\db\pager::$page = (int)$_GET['page'];
+            
+            $ousers = new \darkblog\objects\users();
+            $keyword['users'] = $ousers->getByKeyword($keyword['id']);
         
-        $ousers = new \darkblog\objects\users();
-        $keyword['users'] = $ousers->getByKeyword($keyword['id']);
-    
-        require 'templates/header.php';
-        require 'templates/keyword_bloggers.php';
-    }
-    elseif($_GET['mode'] == 'keywords') {
-        $keyword['keywords'] = $okeywords->getByKeyword($keyword['id']);
-    
-        require 'templates/header.php';
-        require 'templates/keyword_keywords.php';
-    }
-    else {
+            require 'templates/header.php';
+            require 'templates/keyword_bloggers.php';
+        }
+        elseif($_GET['mode'] == 'keywords') {
+            $keyword['keywords'] = $okeywords->getByKeyword($keyword['id']);
+        
+            require 'templates/header.php';
+            require 'templates/keyword_keywords.php';
+        }
+    } else {
         \darkblog\db\pager::$order = 'name';
         if(!empty($_GET['page'])) \darkblog\db\pager::$page = (int)$_GET['page'];
         

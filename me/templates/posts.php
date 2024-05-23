@@ -36,28 +36,32 @@
             </td>
             <td><?=$post['address']?></td>
             <td> <?=$post['expires_in']?> blocks <?=$post['expires_in_days']?> days </td>
-            <td><?=$post['vars']['lang']?></td>
+
+            <?if(isset($post['vars']['title'])):?>  
+                <td><?=$post['vars']['lang']?></td>
+            <?else:?> 
+                <td></td>
+            <?endif;?>
+
             <td><a class="btn btn-info" href="/me/edit_post.php?name=<?=$post['name']?>">Edit</a> </td>
         </tr>
         <?if(isset($post['vars']['keywords']) || isset($post['vars']['reply']) || isset($post['vars']['username']) || isset($post['vars']['sig'])):?>
         <tr>
             <td colspan='5'> 
                 <?if(isset($post['vars']['keywords'])):?>
-                <b>Keywords:</b><?=$post['vars']['keywords']?>
+                <p> <b>Keywords:</b> <?=$post['vars']['keywords']?> </p>
                 <?endif;?>
                 <?if(isset($post['vars']['reply'])):?>
-                <b>Reply:</b><?=$post['vars']['reply']?>
+                <p> <b>Reply:</b> <?=$post['vars']['reply']?> </p>
                 <?endif;?>
                 <?if(isset($post['vars']['username'])):?>
-                <b>Username:</b>
-                <a href='/bloggers.php?name=<?=$post['vars']['username']?>' target='blank'><?=$post['vars']['username']?></a>
+                <p>  <b>Username:</b> <a href='/bloggers.php?name=<?=$post['vars']['username']?>' target='blank'><?=$post['vars']['username']?></a> </p>
                 <?endif;?>
                 <?if(isset($post['time'])):?>
-                <b>Created:</b>
-                <?=$post['time']?>
+                <p> <b>Created:</b> <?=$post['time']?> </p>
                 <?endif;?>
                 <?if(isset($post['vars']['sig'])):?>
-                <b>Signature:</b><?=$post['vars']['sig']?>
+                <p> <b>Signature:</b> <?=$post['vars']['sig']?> </p>
                 <?endif;?>
             </td>
         </tr>

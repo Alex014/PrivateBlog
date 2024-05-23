@@ -66,27 +66,64 @@ class emercoin {
     return self::$rpcClient->listaccounts();
   }
   
+  public static function listlabels() {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    self::$emercoin_info = self::$rpcClient->getinfo();
+    
+    return self::$rpcClient->listlabels();
+  }
+  
   public static function listAccountsAddresses() {  
-    $accounts = \darkblog\lib\emercoin::listaccounts();
+    $accounts = self::listaccounts();
     $result = array();
       
     foreach ($accounts as $account => $ammount) {
-        $result[$account] = \darkblog\lib\emercoin::getAddressesByAccount($account);
+        $result[$account] = self::getAddressesByAccount($account);
     }
     
     return $result;
   }
   
-  public static function getFirstAddress() {  
-    $accounts = \darkblog\lib\emercoin::listaccounts();
-      
+  public static function getFirstAddressOld() {  
+    $accounts = self::listaccounts();
+
     foreach ($accounts as $account => $ammount) {
-        $addresses = \darkblog\lib\emercoin::getAddressesByAccount($account);
+        $addresses = self::getAddressesByAccount($account);
         foreach ($addresses as $addr) {
             $address = $addr;
         }
     }
     return $address;
+  }
+  
+  public static function getFirstAddress() {  
+    $labels = self::listlabels();
+    
+    foreach ($labels as $lbl) {
+      $label = $lbl;
+      $addresses = self::getAddressesByLabel($label);
+
+      foreach ($addresses as $addr => $info) {
+          $info = self::getAddressInfo($addr);
+
+          if ($info['ismine']) {
+            return $addr;
+          }
+      }
+    }
+
+    return false;
+  }
+
+  public static function getAddressInfo($address) {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    self::$emercoin_info = self::$rpcClient->getinfo();
+    
+    return self::$rpcClient->getaddressinfo($address);
   }
   
   /**
@@ -101,6 +138,20 @@ class emercoin {
     self::$emercoin_info = self::$rpcClient->getinfo();
     
     return self::$rpcClient->getaddressesbyaccount($account);
+  }
+  
+  /**
+   * All Addresses by label
+   * @param type $label
+   * @return type
+   */
+  public static function getAddressesByLabel($label) {
+    $url = self::$username.':'.self::$password.'@'.self::$address.':'.self::$port.'/';
+    self::$rpcClient = new jsonRPCClient($url, self::$debug);
+    
+    self::$emercoin_info = self::$rpcClient->getinfo();
+    
+    return self::$rpcClient->getaddressesbylabel($label);
   }
   
   /**
@@ -503,129 +554,177 @@ class emercoin {
 
 /**
 
-08:19:59
-￼
-Добро пожаловать в RPC-консоль Emercoin.
-Используйте стрелки вверх и вниз для просмотра истории и Ctrl-L для очистки экрана.
-Напишите help для просмотра доступных команд.
-
-
-10:18:36
-￼
-help
-
-
-10:18:36
-￼
 == Blockchain ==
 getbestblockhash
-getblock "hash" ( verbose )
+getblock "blockhash" ( verbosity )
 getblockchaininfo
 getblockcount
-getblockhash index
+getblockfilter "blockhash" ( "filtertype" )
+getblockhash height
+getblockheader "blockhash" ( verbose )
+getblockstats hash_or_height ( stats )
 getchaintips
+getchaintxstats ( nblocks "blockhash" )
 getdifficulty
+getmempoolancestors "txid" ( verbose )
+getmempooldescendants "txid" ( verbose )
+getmempoolentry "txid"
 getmempoolinfo
 getrawmempool ( verbose )
-gettxlistfor <from block> <to block> <address> [type=0] [verbose=0]
-gettxout "txid" n ( includemempool )
+gettxout "txid" n ( include_mempool )
+gettxoutproof ["txid",...] ( "blockhash" )
 gettxoutsetinfo
+name_delete "name"
 name_filter [regexp] [maxage=0] [from=0] [nb=0] [stat] [valuetype]
 name_history <name> [fullhistory] [valuetype]
+name_indexinfo
+name_list [name] [valuetype]
 name_mempool [valuetype]
-name_scan [start-name] [max-returned] [max-value-length=-1] [valuetype]
+name_new "name" "value" days ( "toaddress" "valuetype" )
+name_scan [start-name] [max-returned] [max-value-length=0] [valuetype]
+name_scan_address <address> [max-value-length=0] [valuetype]
 name_show <name> [valuetype] [filepath]
-verifychain ( checklevel numblocks )
+name_update "name" "value" days ( "toaddress" "valuetype" )
+name_updatemany [{"NEW/UPDATE/DELETE":"str","value":"str","days":n,"toaddress":"str","valuetype":"str"},...]
+preciousblock "blockhash"
+pruneblockchain height
+savemempool
+scantxoutset "action" ( [scanobjects,...] )
+sendtoname "name" amount ( "comment" "comment_to" )
+verifychain ( checklevel nblocks )
+verifytxoutproof "proof"
 
 == Control ==
 getinfo
+getmemoryinfo ( "mode" )
+getrpcinfo
 help ( "command" )
-reservebalance [<reserve> [amount]]
+logging ( ["include_category",...] ["exclude_category",...] )
 stop
+uptime
 
 == Generating ==
-getgenerate
-gethashespersec
-setgenerate generate ( genproclimit )
+generate nblocks ( maxtries )
+generatetoaddress nblocks "address" ( maxtries )
 
 == Mining ==
-getauxblock [<hash> <auxpow>]
-getblocktemplate ( "jsonrequestobject" )
+getauxblock ( "hash" "auxpow" )
+getblocktemplate ( "template_request" )
 getmininginfo
-getnetworkhashps ( blocks height )
-prioritisetransaction <txid> <priority delta> <fee delta>
-submitblock "hexdata" ( "jsonparametersobject" )
+getnetworkhashps ( nblocks height )
+prioritisetransaction "txid" ( dummy ) fee_delta
+submitblock "hexdata" ( "dummy" )
+submitheader "hexdata"
 
 == Network ==
-addnode "node" "add|remove|onetry"
-getaddednodeinfo dns ( "node" )
+addnode "node" "command"
+clearbanned
+disconnectnode ( "address" nodeid )
+getaddednodeinfo ( "node" )
 getcheckpoint
 getconnectioncount
 getnettotals
 getnetworkinfo
+getnodeaddresses ( count )
 getpeerinfo
+listbanned
 ping
+setban "subnet" "command" ( bantime absolute )
+setnetworkactive state
+
+== Randpay ==
+randpay_accept hexstring ( flags )
+randpay_mkchap amount risk timeout
+randpay_mktx "chap" timeout ( flags )
 
 == Rawtransactions ==
-createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,...}
-decoderawtransaction "hexstring"
-decodescript "hex"
-getrawtransaction "txid" ( verbose )
-sendrawtransaction "hexstring" ( allowhighfees )
-signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
+analyzepsbt "psbt"
+combinepsbt ["psbt",...]
+combinerawtransaction ["hexstring",...]
+converttopsbt "hexstring" ( permitsigdata iswitness )
+createpsbt [{"txid":"hex","vout":n,"sequence":n},...] [{"address":amount},{"data":"hex"},...] ( locktime replaceable )
+createrawtransaction [{"txid":"hex","vout":n,"sequence":n},...] [{"address":amount},{"data":"hex"},...] ( locktime replaceable )
+decodepsbt "psbt"
+decoderawtransaction "hexstring" ( iswitness )
+decodescript "hexstring"
+finalizepsbt "psbt" ( extract )
+fundrawtransaction "hexstring" ( options iswitness )
+getrawtransaction "txid" ( verbose "blockhash" )
+joinpsbts ["psbt",...]
+sendrawtransaction "hexstring" ( maxfeerate )
+signrawtransactionwithkey "hexstring" ["privatekey",...] ( [{"txid":"hex","vout":n,"scriptPubKey":"hex","redeemScript":"hex","witnessScript":"hex","amount":amount},...] "sighashtype" )
+testmempoolaccept ["rawtx",...] ( maxfeerate )
+utxoupdatepsbt "psbt" ( ["",{"desc":"str","range":n or [n,n]},...] )
 
 == Util ==
-createmultisig nrequired ["key",...]
-estimatefee nblocks
-estimatepriority nblocks
-validateaddress "emercoinaddress"
-verifymessage "emercoinaddress" "signature" "message"
+createmultisig nrequired ["key",...] ( "address_type" )
+deriveaddresses "descriptor" ( range )
+estimatesmartfee conf_target ( "estimate_mode" )
+getdescriptorinfo "descriptor"
+signmessagewithprivkey "privkey" "message"
+validateaddress "address"
+verifymessage "address" "signature" "message"
 
 == Wallet ==
-addmultisigaddress nrequired ["key",...] ( "account" )
+abandontransaction "txid"
+abortrescan
+addmultisigaddress nrequired ["key",...] ( "label" "address_type" )
 backupwallet "destination"
-dumpprivkey "emercoinaddress"
+createwallet "wallet_name" ( disable_private_keys blank "passphrase" avoid_reuse )
+dumpprivkey "address"
 dumpwallet "filename"
-getaccount "emercoinaddress"
-getaccountaddress "account"
-getaddressesbyaccount "account"
-getbalance ( "account" minconf includeWatchonly )
-getnewaddress ( "account" )
-getrawchangeaddress
-getreceivedbyaccount "account" ( minconf )
-getreceivedbyaddress "emercoinaddress" ( minconf )
-gettransaction "txid" ( includeWatchonly )
+encryptwallet "passphrase"
+getaddressesbylabel "label"
+getaddressinfo "address"
+getbalance ( "dummy" minconf include_watchonly avoid_reuse )
+getbalances
+getnewaddress ( "label" "address_type" )
+getrawchangeaddress ( "address_type" )
+getreceivedbyaddress "address" ( minconf )
+getreceivedbylabel "label" ( minconf )
+gettransaction "txid" ( include_watchonly verbose )
 getunconfirmedbalance
 getwalletinfo
-importaddress "address" ( "label" rescan )
-importprivkey "emercoinprivkey" ( "label" rescan )
+importaddress "address" ( "label" rescan p2sh )
+importmulti "requests" ( "options" )
+importprivkey "privkey" ( "label" rescan )
+importprunedfunds "rawtransaction" "txoutproof"
+importpubkey "pubkey" ( "label" rescan )
 importwallet "filename"
 keypoolrefill ( newsize )
-listaccounts ( minconf includeWatchonly)
 listaddressgroupings
+listlabels ( "purpose" )
 listlockunspent
-listreceivedbyaccount ( minconf includeempty includeWatchonly)
-listreceivedbyaddress ( minconf includeempty includeWatchonly)
-listsinceblock ( "blockhash" target-confirmations includeWatchonly)
-listtransactions ( "account" count from includeWatchonly)
-listunspent ( minconf maxconf ["address",...] )
-lockunspent unlock [{"txid":"txid","vout":n},...]
-makekeypair [prefix]
-move "fromaccount" "toaccount" amount ( minconf "comment" )
-name_delete <name>
-name_list [name] [valuetype]
-name_new <name> <value> <days> [toaddress] [valuetype]
-name_update <name> <value> <days> [toaddress] [valuetype]
-dumpprivkey "emercoinprivkey"
-sendfrom "fromaccount" "toemercoinaddress" amount ( minconf "comment" "comment-to" )
-sendmany "fromaccount" {"address":amount,...} ( minconf "comment" )
-sendtoaddress "emercoinaddress" amount ( "comment" "comment-to" )
-sendtoname <name> <amount> [comment] [comment-to]
-setaccount "emercoinaddress" "account"
+listreceivedbyaddress ( minconf include_empty include_watchonly "address_filter" )
+listreceivedbylabel ( minconf include_empty include_watchonly )
+listsinceblock ( "blockhash" target_confirmations include_watchonly include_removed )
+listtransactions ( "label" count skip include_watchonly )
+listunspent ( minconf maxconf ["address",...] include_unsafe query_options )
+listwalletdir
+listwallets
+loadwallet "filename"
+lockunspent unlock ( [{"txid":"hex","vout":n},...] )
+makekeypair ( prefix )
+removeprunedfunds "txid"
+rescanblockchain ( start_height stop_height )
+reservebalance ( reserve amount )
+sendmany "" {"address":amount} ( minconf "comment" ["address",...] replaceable conf_target "estimate_mode" )
+sendtoaddress "address" amount ( "comment" "comment_to" subtractfeefromamount replaceable conf_target "estimate_mode" avoid_reuse )
+sethdseed ( newkeypool "seed" )
+setlabel "address" "label"
 settxfee amount
-signmessage "emercoinaddress" "message"
+setwalletflag "flag" ( value )
+signmessage "address" "message"
+signrawtransactionwithwallet "hexstring" ( [{"txid":"hex","vout":n,"scriptPubKey":"hex","redeemScript":"hex","witnessScript":"hex","amount":amount},...] "sighashtype" )
+unloadwallet ( "wallet_name" )
+walletcreatefundedpsbt [{"txid":"hex","vout":n,"sequence":n},...] [{"address":amount},{"data":"hex"},...] ( locktime options bip32derivs )
 walletlock
-walletpassphrase "passphrase" timeout [mintonly]
+walletpassphrase "passphrase" timeout ( mintonly )
 walletpassphrasechange "oldpassphrase" "newpassphrase"
+walletprocesspsbt "psbt" ( sign "sighashtype" bip32derivs )
+
+== Zmq ==
+getzmqnotifications
+
 
  */

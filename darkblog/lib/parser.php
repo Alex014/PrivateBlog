@@ -18,23 +18,23 @@ class parser {
         $matches = array();
         //preg_match_all('/@(\w+).*?=.*?[\'"](.*?)[\'"]/imsr', $content, $matches, PREG_SET_ORDER);
         //mb_eregi('@(\w+).*?=.*?[\'"](.*?)[\'"]', $content, $matches);
-        mb_ereg_search_init($content, '[^@]@(\w+)\s*=\s*[\'"](.*?)[\'"]');
+        mb_ereg_search_init($content, '[^@]@(\w+)\s*?=\s*?[\'"](.*?)[\'"]');
         while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
             $result[$matches[1]] = $matches[2];
         }
-        mb_ereg_search_init($content, '^@(\w+)\s*=\s*[\'"](.*?)[\'"]');
+        mb_ereg_search_init($content, '^@(\w+)\s*?=\s*?[\'"](.*?)[\'"]');
         while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
             $result[$matches[1]] = $matches[2];
         }
 
         //preg_match_all('/@(\w+).*?=.*?([^\s]+)/imsr', $content, $matches, PREG_SET_ORDER);
         //mb_eregi('@(\w+).*?=.*?([^\s]+)', $content, $matches);      
-        mb_ereg_search_init($content, '[^@]@(\w+)\s*=\s*([^\s]+)');
+        mb_ereg_search_init($content, '[^@]@(\w+)\s*?=\s*?([^\\^\s^\n]+)');
         while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
             if(!isset($result[$matches[1]]))
                 $result[$matches[1]] = $matches[2];
         }
-        mb_ereg_search_init($content, '^@(\w+)\s*=\s*([^\s]+)');
+        mb_ereg_search_init($content, '^@(\w+)\s*?=\s*?([^\\^\s^\ns]+)');
         while ($matches = mb_ereg_search_regs()) { //var_dump($matches);
             if(!isset($result[$matches[1]]))
                 $result[$matches[1]] = $matches[2];
@@ -56,21 +56,25 @@ class parser {
         //$result['content'] = $p->parse($result['content']);
         
         //Links to posts
-        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
-        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"?name=\\1\">\\2</a>"', $result['content'], 'e');
+        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content']);
+        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"?name=\\1\">\\2</a>"', $result['content']);
         
         //Links to files
-        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content'], 'e');
-        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content'], 'e');
+        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content']);
+        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content']);
         
-        $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content'], 'e');
-        $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content'], 'e');
+        $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content']);
+        $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content']);
         
         //Scripts
         $result['content'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $result['content']);
         
         //@@@@@@@@@@@@@@@@@@@@@@@
         $result['content'] = preg_replace('#@@#is', '@', $result['content']);
+
+        if (!isset($result['reply'])) {
+            $result['reply'] = '';
+        }
             
         return $result;
     }
@@ -132,6 +136,14 @@ class parser {
     
     public static function nullempty($value) {
         if($value == null) return ''; else return trim($value);
+    }
+
+    public static function null_empty($key, $array) {
+        if (array_key_exists($key, $array)) {
+            return trim($array[$key]);
+        } else {
+            return '';
+        }
     }
     
     

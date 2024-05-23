@@ -7,14 +7,14 @@ namespace darkblog\objects;
  * @author user
  */
 class keywords {
+
+    private $lang_id = 0;
     
     public function __construct() {
         $olang = new \darkblog\db\langs();
-        $lang = $_SESSION['lang'];
-        if(!empty($lang))
-            $this->lang_id = $olang->getIdByName($lang);
-        else
-            $this->lang_id = 0;
+        if(isset($_SESSION) && isset($_SESSION['lang'])) {
+            $this->lang_id = $olang->getIdByName($_SESSION['lang']);
+        }
     }
     
     public function getKeyword($keyword_id) {
@@ -38,7 +38,14 @@ class keywords {
     public function getKeywords() {
         $okeywords = new \darkblog\db\keywords();
         $lang_id = $this->lang_id;
-        return $okeywords->selectAll($lang_id);
+        $keywords =  $okeywords->selectAll($lang_id);
+        return array_filter($keywords, function ($row) {
+            if (false === strpos($row['word'], '@') && false === strpos($row['word'], '\\') && false === strpos($row['word'], '"') && false === strpos($row['word'], '\'')) {
+                return $row;
+            } else {
+                return false;
+            }
+        });
     }
     
     /**

@@ -140,9 +140,9 @@ function replies_recursive($replies, $level = 1, $name = '') {
             echo "</div>";
 
             if($level == 1)
-                echo '<div id="content_'.$reply[id].'">'.$reply['content'].'</div>';
+                echo '<div id="content_'.$reply['id'].'">'.$reply['content'].'</div>';
             else
-                echo '<div id="content_'.$reply[id].'" style="display: none;">'.$reply['content'].'</div>';
+                echo '<div id="content_'.$reply['id'].'" style="display: none;">'.$reply['content'].'</div>';
 
             echo "<center></center>";
 
@@ -150,9 +150,9 @@ function replies_recursive($replies, $level = 1, $name = '') {
 
 
             if($level == 1)
-                echo '<div id="replies_'.$reply[id].'">';
+                echo '<div id="replies_'.$reply['id'].'">';
             else
-                echo '<div id="replies_'.$reply[id].'" style="display: none;">';
+                echo '<div id="replies_'.$reply['id'].'" style="display: none;">';
 
 
             if(!empty($reply['children']))

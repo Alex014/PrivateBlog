@@ -18,6 +18,11 @@ echo file_get_contents(__DIR__.'/../../js/bootstrap.validate.js');
 echo file_get_contents(__DIR__.'/../../js/bootstrap.validate.en.js');
 ?>
 </script>
+<script type='text/javascript'>
+<?php
+echo file_get_contents(__DIR__.'/../js/common.js');
+?>
+</script>
 
 <?else:?>
     
@@ -30,6 +35,8 @@ echo file_get_contents(__DIR__.'/../../js/bootstrap.validate.en.js');
 
         <script src="/js/bootstrap.validate.js"></script>
         <script src="/js/bootstrap.validate.en.js"></script>
+    
+        <script src="/js/common.js"></script>
 
         
 <?endif;?>

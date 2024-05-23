@@ -14,7 +14,7 @@ class files {
         return array_map(function($file) {
             $name = explode(':', $file['name']);
             $file['name'] = '';
-            for($i == 0; $i < count($name); $i++) {
+            for($i = 0; $i < count($name); $i++) {
                 if($i > 1)
                     $file['name'] .= ':'.$name[$i];
                 elseif($i > 0)
