@@ -56,12 +56,11 @@ class parser {
         //$result['content'] = $p->parse($result['content']);
         
         //Links to posts
-        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"?name=\\1\">\\2</a>"', $result['content']);
-        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"?name=\\1\">\\2</a>"', $result['content']);
+        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*[\'"](.*?)[\'"]', '<a href=\"?name=\\1\">\\2</a>', $result['content']);
+        $result['content'] = mb_eregi_replace('#(\w+)\s*=\s*([^\n^\'^""]+)', '<a href=\"?name=\\1\">\\2</a>', $result['content']);
         
         //Links to files
-        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content']);
-        $result['content'] = mb_eregi_replace('\$\$\$(\w+)', '"/file.php?id=\\1"', $result['content']);
+        $result['content'] = preg_replace('/\$\$\$(\w+)/i', '/file.php?id=$1', $result['content']);
         
         $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*[\'"](.*?)[\'"]', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content']);
         $result['content'] = mb_eregi_replace('\$(\w+)\s*=\s*([^\n^\'^""]+)', '"<a href=\"/file.php?id=\\1\" target=_blank>\\2</a>"', $result['content']);
